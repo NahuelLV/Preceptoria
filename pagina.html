@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portal Colegio</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <!-- Pantalla de bienvenida -->
+    <section id="welcome-screen" class="screen active">
+      <h1>Bienvenido al Portal del Colegio</h1>
+      <button id="start-btn" class="btn">Ingresar</button>
+    </section>
+
+    <!-- Menú principal -->
+    <section id="menu-screen" class="screen">
+      <h2>¿Qué deseas ver?</h2>
+      <div class="menu-buttons">
+        <button data-section="datos" class="btn menu-btn">Datos de Alumnos</button>
+        <button data-section="notas" class="btn menu-btn">Notas</button>
+        <button data-section="asistencia" class="btn menu-btn">Asistencia</button>
+      </div>
+    </section>
+
+    <!-- Contenido -->
+    <section id="content-screen" class="screen">
+      <div class="top-bar">
+        <button id="back-btn" class="btn back-btn">&larr; Volver al Menú</button>
+        <input type="text" id="search-input" placeholder="Buscar alumno..." />
+      </div>
+      <div id="content"></div>
+    </section>
+  </div>
+
+  <!-- Modal Detalles Alumno -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span id="modal-close" class="modal-close">&times;</span>
+      <h3 id="modal-nombre"></h3>
+      <p><strong>Curso:</strong> <span id="modal-curso"></span></p>
+      <h4>Notas</h4>
+      <ul id="modal-notas"></ul>
+      <h4>Asistencia</h4>
+      <ul id="modal-asistencia"></ul>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
