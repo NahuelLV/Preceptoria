@@ -1,8 +1,9 @@
-/* RESET */
+/* Reset y estilos generales */
 * {
   margin: 0; padding: 0; box-sizing: border-box;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
 body {
   background-color: #000;
   color: #eee;
@@ -12,6 +13,7 @@ body {
   align-items: center;
   padding: 20px;
 }
+
 .container {
   background-color: #111;
   max-width: 900px;
@@ -21,23 +23,26 @@ body {
   box-shadow: 0 0 25px rgba(25, 118, 210, 0.7);
   position: relative;
 }
+
 .screen {
   display: none;
   flex-direction: column;
   align-items: center;
   text-align: center;
 }
+
 .screen.active {
   display: flex;
 }
+
 h1 {
-  color: #D32F2F; /* rojo */
+  color: #D32F2F;
   margin-bottom: 25px;
   font-size: 2.5rem;
 }
 
 h2 {
-  color: #1976D2; /* azul */
+  color: #1976D2;
   margin-bottom: 20px;
   font-size: 1.8rem;
 }
@@ -131,7 +136,7 @@ thead th {
 
 tbody tr {
   background-color: #222;
-  cursor: default; /* ya no pointer porque no abre modal */
+  cursor: pointer;
   transition: background-color 0.2s;
 }
 
@@ -144,14 +149,56 @@ tbody td {
   border-bottom: 1px solid #444;
   color: #eee;
 }
-/* Colores para asistencia */
-.attendance-good {
-  color: #4CAF50; /* verde */
-  font-weight: 600;
+
+/* Modal */
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.85);
+  justify-content: center;
+  align-items: center;
 }
 
-.attendance-bad {
-  color: #D32F2F; /* rojo */
-  font-weight: 700;
+.modal-content {
+  background: #111;
+  padding: 30px 40px;
+  border-radius: 12px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 0 20px #1976D2;
+  color: #eee;
+  position: relative;
+  max-height: 80vh;
+  overflow-y: auto;
 }
-/* Eliminado estilos modal ya que modal no existe */
+
+.modal-close {
+  position: absolute;
+  right: 18px;
+  top: 12px;
+  font-size: 1.8rem;
+  color: #D32F2F;
+  cursor: pointer;
+  font-weight: bold;
+  user-select: none;
+}
+
+.modal-close:hover {
+  color: #1976D2;
+}
+
+.modal-content h3 {
+  margin-bottom: 10px;
+}
+
+.modal-content h4 {
+  margin-top: 20px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #D32F2F;
+  padding-bottom: 4px;
+}
