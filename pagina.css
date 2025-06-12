@@ -3,7 +3,6 @@
   margin: 0; padding: 0; box-sizing: border-box;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-
 body {
   background-color: #000;
   color: #eee;
@@ -13,7 +12,6 @@ body {
   align-items: center;
   padding: 20px;
 }
-
 .container {
   background-color: #111;
   max-width: 900px;
@@ -23,18 +21,15 @@ body {
   box-shadow: 0 0 25px rgba(25, 118, 210, 0.7);
   position: relative;
 }
-
 .screen {
   display: none;
   flex-direction: column;
   align-items: center;
   text-align: center;
 }
-
 .screen.active {
   display: flex;
 }
-
 h1 {
   color: #D32F2F; /* rojo */
   margin-bottom: 25px;
@@ -149,7 +144,6 @@ tbody td {
   border-bottom: 1px solid #444;
   color: #eee;
 }
-
 /* Colores para asistencia */
 .attendance-good {
   color: #4CAF50; /* verde */
@@ -160,3 +154,4 @@ tbody td {
   color: #D32F2F; /* rojo */
   font-weight: 700;
 }
+/* Eliminado estilos modal ya que modal no existe */
