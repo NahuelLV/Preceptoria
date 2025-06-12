@@ -64,7 +64,6 @@ function renderSection(section, filter = "") {
       contenidoDiv.innerHTML = "<p>Error: sección desconocida.</p>";
   }
 }
-
 // Renderizar datos básicos
 function renderDatos(filter) {
   const filtered = students.filter(s => s.nombre.toLowerCase().includes(filter.toLowerCase()));
@@ -86,10 +85,8 @@ function renderDatos(filter) {
 
   html += "</tbody></table>";
   contenidoDiv.innerHTML = html;
-
   // No se adjuntan listeners para abrir modal ya que fue eliminado
 }
-
 // Renderizar notas
 function renderNotas(filter) {
   const filtered = students.filter(s => s.nombre.toLowerCase().includes(filter.toLowerCase()));
@@ -183,6 +180,5 @@ searchInput.addEventListener("input", e => {
   const filtro = e.target.value.trim();
   renderSection(currentSection, filtro);
 });
-
 // Inicio en pantalla bienvenida
 showScreen(welcomeScreen);
