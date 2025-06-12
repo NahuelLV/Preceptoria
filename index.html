@@ -1,5 +1,12 @@
-<link rel="stylesheet" href="pagina.css" />
-
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portal Colegio</title>
+  <link rel="stylesheet" href="pagina.css" />
+</head>
+<body>
   <div class="container">
     <!-- Pantalla de bienvenida -->
     <section id="welcome-screen" class="screen active">
@@ -16,6 +23,7 @@
         <button data-section="asistencia" class="btn menu-btn">Asistencia</button>
       </div>
     </section>
+
     <!-- Contenido -->
     <section id="content-screen" class="screen">
       <div class="top-bar">
@@ -25,4 +33,20 @@
       <div id="content"></div>
     </section>
   </div>
-<script src="datos.js"></script>
+
+  <!-- Modal Detalles Alumno -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span id="modal-close" class="modal-close">&times;</span>
+      <h3 id="modal-nombre"></h3>
+      <p><strong>Curso:</strong> <span id="modal-curso"></span></p>
+      <h4>Notas</h4>
+      <ul id="modal-notas"></ul>
+      <h4>Asistencia</h4>
+      <ul id="modal-asistencia"></ul>
+    </div>
+  </div>
+
+  <script src="datos.js"></script>
+</body>
+</html>
