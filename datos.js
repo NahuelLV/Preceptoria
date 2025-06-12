@@ -38,14 +38,6 @@ const menuButtons = document.querySelectorAll(".menu-btn");
 const contenidoDiv = document.getElementById("content");
 const searchInput = document.getElementById("search-input");
 
-// Modal
-const modal = document.getElementById("modal");
-const modalClose = document.getElementById("modal-close");
-const modalNombre = document.getElementById("modal-nombre");
-const modalCurso = document.getElementById("modal-curso");
-const modalNotas = document.getElementById("modal-notas");
-const modalAsistencia = document.getElementById("modal-asistencia");
-
 let currentSection = null;
 
 // Mostrar una pantalla y ocultar las otras
@@ -54,50 +46,7 @@ function showScreen(screen) {
   screen.classList.add("active");
 }
 
-// Mostrar modal con datos completos del alumno
-function showModalAlumno(alumno) {
-  modalNombre.textContent = alumno.nombre;
-  modalCurso.textContent = alumno.curso;
-
-  modalNotas.innerHTML = "";
-  modalAsistencia.innerHTML = "";
-
-  for (const [materia, nota] of Object.entries(alumno.notas)) {
-    const li = document.createElement("li");
-    li.textContent = `${materia}: ${nota.toFixed(1)}`;
-    modalNotas.appendChild(li);
-  }
-
-  for (const [tipo, cantidad] of Object.entries(alumno.asistencia)) {
-    const label = tipo.charAt(0).toUpperCase() + tipo.slice(1);
-    const li = document.createElement("li");
-    li.textContent = `${label}: ${cantidad}`;
-    modalAsistencia.appendChild(li);
-  }
-
-  modal.style.display = "flex";
-}
-
-// Cerrar modal
-function closeModal() {
-  modal.style.display = "none";
-}
-
-// Agregar listener a filas para mostrar modal al hacer clic
-function attachRowListeners() {
-  const rows = contenidoDiv.querySelectorAll("tbody tr");
-  rows.forEach(row => {
-    row.style.cursor = "pointer";
-    const nombreCell = row.querySelector("td:first-child");
-    if (!nombreCell) return;
-
-    row.onclick = () => {
-      const nombre = nombreCell.textContent.trim();
-      const alumno = students.find(s => s.nombre === nombre);
-      if (alumno) showModalAlumno(alumno);
-    };
-  });
-}
+// ** Eliminado showModalAlumno, closeModal y attachRowListeners que abrían el modal **
 
 // Renderizar la tabla según sección y filtro
 function renderSection(section, filter = "") {
@@ -137,7 +86,8 @@ function renderDatos(filter) {
 
   html += "</tbody></table>";
   contenidoDiv.innerHTML = html;
-  attachRowListeners();
+
+  // No se adjuntan listeners para abrir modal ya que fue eliminado
 }
 
 // Renderizar notas
@@ -171,7 +121,7 @@ function renderNotas(filter) {
 
   html += "</tbody></table>";
   contenidoDiv.innerHTML = html;
-  attachRowListeners();
+  // Sin listeners
 }
 
 // Renderizar asistencia
@@ -205,7 +155,7 @@ function renderAsistencia(filter) {
 
   html += "</tbody></table>";
   contenidoDiv.innerHTML = html;
-  attachRowListeners();
+  // Sin listeners
 }
 
 // EVENTOS
@@ -232,13 +182,6 @@ backBtn.addEventListener("click", () => {
 searchInput.addEventListener("input", e => {
   const filtro = e.target.value.trim();
   renderSection(currentSection, filtro);
-});
-
-// Modal cerrar
-modalClose.addEventListener("click", closeModal);
-
-window.addEventListener("click", e => {
-  if (e.target === modal) closeModal();
 });
 
 // Inicio en pantalla bienvenida
