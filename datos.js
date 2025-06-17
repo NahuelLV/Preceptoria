@@ -384,6 +384,7 @@ searchInput.addEventListener("input", function () {
     }
 
     return matches;
+    
   });
 
   renderSection(currentSection, filteredStudents);
