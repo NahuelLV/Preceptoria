@@ -389,3 +389,4 @@ searchInput.addEventListener("input", function () {
 
   renderSection(currentSection, filteredStudents);
 });
+
