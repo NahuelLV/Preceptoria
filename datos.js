@@ -1,39 +1,99 @@
-// Datos simulados (con nombre y apellido separados, DNI y Turno)
+// Datos simulados (con DNI y Turno, y datos completos de responsables)
 const students = [
   {
     nombre: "Ana",
     apellido: "García",
-    dni: "12345678", // Agregado DNI
+    dni: "12345678",
     curso: "5° A",
-    turno: "Mañana", // Agregado Turno
-    responsables: { responsable1: "Juan García", responsable2: "María López" },
+    turno: "Mañana",
+    responsables: [ // Cambiado a un array para múltiples responsables
+      {
+        nombre: "Juan",
+        apellido: "García",
+        parentesco: "Padre",
+        telefono: "1122334455",
+        dni: "20123456",
+        email: "juan.garcia@example.com"
+      },
+      {
+        nombre: "María",
+        apellido: "López",
+        parentesco: "Madre",
+        telefono: "1199887766",
+        dni: "25678901",
+        email: "maria.lopez@example.com"
+      }
+    ],
     notas: { Matemáticas: 8.5, Español: 9.0, Ciencias: 7.8 },
   },
   {
     nombre: "Juan",
     apellido: "Pérez",
-    dni: "87654321", // Agregado DNI
+    dni: "87654321",
     curso: "5° B",
-    turno: "Tarde", // Agregado Turno
-    responsables: { responsable1: "Carlos Pérez", responsable2: "Laura Fernández" },
+    turno: "Tarde",
+    responsables: [
+      {
+        nombre: "Carlos",
+        apellido: "Pérez",
+        parentesco: "Padre",
+        telefono: "1155443322",
+        dni: "22334455",
+        email: "carlos.perez@example.com"
+      },
+      {
+        nombre: "Laura",
+        apellido: "Fernández",
+        parentesco: "Madre",
+        telefono: "1166778899",
+        dni: "27890123",
+        email: "laura.fernandez@example.com"
+      }
+    ],
     notas: { Matemáticas: 6.0, Español: 7.2, Ciencias: 6.5 },
   },
   {
     nombre: "Lucía",
     apellido: "Martínez",
-    dni: "98765432", // Agregado DNI
+    dni: "98765432",
     curso: "5° A",
-    turno: "Mañana", // Agregado Turno
-    responsables: { responsable1: "José Martínez", responsable2: "Ana Rodríguez" },
+    turno: "Mañana",
+    responsables: [
+      {
+        nombre: "José",
+        apellido: "Martínez",
+        parentesco: "Tutor",
+        telefono: "1111223344",
+        dni: "28901234",
+        email: "jose.martinez@example.com"
+      }
+    ], // Un solo responsable para este ejemplo
     notas: { Matemáticas: 9.2, Español: 8.7, Ciencias: 9.0 },
   },
   {
     nombre: "Carlos",
     apellido: "Rodríguez",
-    dni: "23456789", // Agregado DNI
+    dni: "23456789",
     curso: "5° C",
-    turno: "Tarde", // Agregado Turno
-    responsables: { responsable1: "Ricardo Rodríguez", responsable2: "Elena Ruiz" },
+    turno: "Tarde",
+    responsables: [
+      {
+        nombre: "Ricardo",
+        apellido: "Rodríguez",
+        parentesco: "Padre",
+        telefono: "1144556677",
+        dni: "29012345",
+        email: "ricardo.rodriguez@example.com"
+      },
+      {
+        nombre: "Elena",
+        apellido: "Ruiz",
+        parentesco: "Madre",
+        telefono: "1177889900",
+        dni: "30123456",
+        email: "elena.ruiz@example.com"
+      }
+    ],
     notas: { Matemáticas: 5.5, Español: 6.0, Ciencias: 5.0 },
   },
    {
@@ -42,7 +102,24 @@ const students = [
     dni: "11223344",
     curso: "6° A",
     turno: "Mañana",
-    responsables: { responsable1: "Pedro González", responsable2: "Elena Díaz" },
+    responsables: [
+      {
+        nombre: "Pedro",
+        apellido: "González",
+        parentesco: "Padre",
+        telefono: "1122334455",
+        dni: "35467890",
+        email: "pedro.gonzalez@example.com"
+      },
+      {
+        nombre: "Elena",
+        apellido: "Díaz",
+        parentesco: "Madre",
+        telefono: "1199887766",
+        dni: "36578901",
+        email: "elena.diaz@example.com"
+      }
+    ],
     notas: { Matemáticas: 7.0, Español: 8.0, Ciencias: 7.5 },
   },
   {
@@ -51,7 +128,24 @@ const students = [
     dni: "55667788",
     curso: "6° B",
     turno: "Tarde",
-    responsables: { responsable1: "Mariana López", responsable2: "Jorge Torres" },
+    responsables: [
+      {
+        nombre: "Mariana",
+        apellido: "López",
+        parentesco: "Madre",
+        telefono: "1155443322",
+        dni: "37689012",
+        email: "mariana.lopez@example.com"
+      },
+      {
+        nombre: "Jorge",
+        apellido: "Torres",
+        parentesco: "Padre",
+        telefono: "1166778899",
+        dni: "38790123",
+        email: "jorge.torres@example.com"
+      }
+    ],
     notas: { Matemáticas: 6.8, Español: 7.5, Ciencias: 6.2 },
   },
 ];
@@ -106,7 +200,7 @@ function mostrarDatosAlumnos(alumnosAMostrar = students) {
             <td>${alumno.dni}</td>
             <td>${alumno.curso}</td>
             <td>${alumno.turno}</td>
-            <td>${alumno.responsables.responsable1} / ${alumno.responsables.responsable2}</td>
+            <td>${alumno.responsables.map(r => r.nombre + ' ' + r.apellido).join(' / ')}</td>
           </tr>`
           )
           .join("")}
@@ -119,15 +213,25 @@ function mostrarDatosAlumnos(alumnosAMostrar = students) {
 function showModalAlumno(index) {
   const alumno = students[index];
   modalNombre.textContent = `${alumno.nombre} ${alumno.apellido}`;
+  
+  // Mostrar Curso, DNI y Turno del alumno. El DNI solo se muestra aquí.
   modalCurso.innerHTML = `<strong>Curso:</strong> ${alumno.curso}<br><strong>DNI:</strong> ${alumno.dni}<br><strong>Turno:</strong> ${alumno.turno}`;
 
-  modalResponsables.innerHTML = `
-    <p><strong>Responsable 1:</strong> ${alumno.responsables.responsable1}</p>
-    <p><strong>Responsable 2:</strong> ${alumno.responsables.responsable2}</p>
-  `;
-
-  modalNotas.innerHTML = "";
-
+  modalResponsables.innerHTML = "<h4>Responsables</h4>"; // Título para la sección de responsables
+  alumno.responsables.forEach((resp, i) => {
+    if (i > 0) { // Añadir <hr> antes de cada responsable adicional
+      modalResponsables.innerHTML += '<hr>';
+    }
+    modalResponsables.innerHTML += `
+      <p><strong>Nombre:</strong> ${resp.nombre} ${resp.apellido}</p>
+      <p><strong>Parentesco:</strong> ${resp.parentesco}</p>
+      <p><strong>Teléfono:</strong> ${resp.telefono}</p>
+      <p><strong>DNI:</strong> ${resp.dni}</p>
+      <p><strong>Email:</strong> ${resp.email}</p>
+    `;
+  });
+  
+  modalNotas.innerHTML = ""; // Limpiar notas previas
   for (const [materia, nota] of Object.entries(alumno.notas)) {
     const li = document.createElement("li");
     li.textContent = `${materia}: ${nota.toFixed(1)}`;
@@ -214,7 +318,7 @@ function mostrarNotas(alumnosAMostrar = students) {
   `;
 }
 
-// Función de búsqueda (actualizada para buscar sin tildes, mayúsculas, y con '°' -> 'to')
+// Función de búsqueda (SOLO busca por datos del alumno: DNI, curso+apellido, y turno)
 searchInput.addEventListener("input", function () {
   const normalizedSearchTerm = normalizeString(searchInput.value.trim());
   
@@ -225,7 +329,6 @@ searchInput.addEventListener("input", function () {
     const normalizedTurno = normalizeString(alumno.turno);
 
     // Normalizamos el curso para la búsqueda "apellido + (parte de) curso"
-    // `replace(/[^0-9a-z]/gi, '')` quita caracteres como '°', ' '
     const normalizedCursoParaBusqueda = normalizeString(alumno.curso).replace(/[^0-9a-z]/gi, '');
     const normalizedApellidoCurso = normalizeString(`${alumno.apellido} ${alumno.curso}`);
 
@@ -244,14 +347,11 @@ searchInput.addEventListener("input", function () {
     }
 
     // 2. Coincidencia para "apellido + curso" (todo normalizado)
-    // Esto es para cuando el usuario busca "garcia 5to año" o "perez 6"
     if (!matches && searchParts.length >= 2) {
         const searchApellido = searchParts[0];
-        const searchCurso = searchParts.slice(1).join(' '); // El resto es el curso, también normalizado
+        const searchCurso = searchParts.slice(1).join(' '); 
 
         if (normalizeString(alumno.apellido).includes(searchApellido)) {
-            // Permitir que "5to año" coincida con "5a", "5b", etc. normalizados
-            // Aquí, `normalizedCursoParaBusqueda` ya tiene el '°' reemplazado por 'to'
             if (normalizedCursoParaBusqueda.includes(normalizeString(searchCurso))) {
                 matches = true;
             }
@@ -263,9 +363,10 @@ searchInput.addEventListener("input", function () {
         matches = true;
     }
 
+    // *** ELIMINADA LA SECCIÓN DE BÚSQUEDA DENTRO DE LOS RESPONSABLES ***
+
     return matches;
   });
 
-  // Renderiza la sección actual con los estudiantes filtrados
   renderSection(currentSection, filteredStudents);
 });
