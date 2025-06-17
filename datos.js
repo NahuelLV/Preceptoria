@@ -96,7 +96,7 @@ const students = [
     ],
     notas: { Matemáticas: 5.5, Español: 6.0, Ciencias: 5.0, Música: 7.0 },
   },
-   {
+    {
     nombre: "Sofía",
     apellido: "González",
     dni: "11223344",
@@ -185,12 +185,13 @@ function mostrarDatosAlumnos(alumnosAMostrar = students) {
     <table>
       <thead>
         <tr>
-          <th>Nombre</th>
           <th>Apellido</th>
+          <th>Nombre</th>
           <th>DNI</th>
           <th>Curso</th>
           <th>Turno</th>
-          <th>Responsables</th>
+          <th>Responsable 1</th>
+          <th>Responsable 2</th>
         </tr>
       </thead>
       <tbody>
@@ -198,12 +199,13 @@ function mostrarDatosAlumnos(alumnosAMostrar = students) {
           .map(
             (alumno) => `
           <tr onclick="showModalAlumno(${students.indexOf(alumno)})">
+            <td>${alumno.apellido.toUpperCase()}</td>
             <td>${alumno.nombre}</td>
-            <td>${alumno.apellido}</td>
             <td>${alumno.dni}</td>
             <td>${alumno.curso}</td>
             <td>${alumno.turno}</td>
-            <td>${alumno.responsables.map(r => r.nombre + ' ' + r.apellido).join(' / ')}</td>
+            <td>${alumno.responsables[0] ? alumno.responsables[0].nombre + ' ' + alumno.responsables[0].apellido : ''}</td>
+            <td>${alumno.responsables[1] ? alumno.responsables[1].nombre + ' ' + alumno.responsables[1].apellido : ''}</td>
           </tr>`
           )
           .join("")}
@@ -215,7 +217,7 @@ function mostrarDatosAlumnos(alumnosAMostrar = students) {
 // Función para mostrar el modal con los detalles del alumno
 function showModalAlumno(index) {
   const alumno = students[index];
-  modalNombre.textContent = `${alumno.nombre} ${alumno.apellido}`;
+  modalNombre.textContent = `${alumno.apellido.toUpperCase()}, ${alumno.nombre}`;
   
   // Mostrar Curso, DNI y Turno del alumno.
   let studentDetailsHtml = `<strong>Curso:</strong> ${alumno.curso}<br><strong>DNI:</strong> ${alumno.dni}<br><strong>Turno:</strong> ${alumno.turno}`;
@@ -238,15 +240,15 @@ function showModalAlumno(index) {
 
   modalResponsables.innerHTML = "<h4>Responsables</h4>"; // Título para la sección de responsables
   alumno.responsables.forEach((resp, i) => {
-    if (i > 0) { // Añadir <hr> antes de cada responsable adicional
-      modalResponsables.innerHTML += '<hr>';
-    }
     modalResponsables.innerHTML += `
-      <p><strong>Nombre:</strong> ${resp.nombre} ${resp.apellido}</p>
-      <p><strong>Parentesco:</strong> ${resp.parentesco}</p>
-      <p><strong>Teléfono:</strong> ${resp.telefono}</p>
-      <p><strong>DNI:</strong> ${resp.dni}</p>
-      <p><strong>Email:</strong> ${resp.email}</p>
+      <div class="responsable-item">
+        <p><strong>Responsable ${i + 1}:</strong></p>
+        <p><strong>Nombre:</strong> ${resp.nombre} ${resp.apellido}</p>
+        <p><strong>Parentesco:</strong> ${resp.parentesco}</p>
+        <p><strong>Teléfono:</strong> ${resp.telefono}</p>
+        <p><strong>DNI:</strong> ${resp.dni}</p>
+        <p><strong>Email:</strong> ${resp.email}</p>
+      </div>
     `;
   });
   
@@ -309,8 +311,8 @@ function mostrarNotas(alumnosAMostrar = students) {
     <table>
       <thead>
         <tr>
-          <th>Nombre</th>
           <th>Apellido</th>
+          <th>Nombre</th>
           <th>Curso</th>
           <th>Turno</th>
           <th>Matemáticas</th>
@@ -323,8 +325,8 @@ function mostrarNotas(alumnosAMostrar = students) {
           .map(
             (alumno) => `
           <tr onclick="showModalAlumno(${students.indexOf(alumno)})">
+            <td>${alumno.apellido.toUpperCase()}</td>
             <td>${alumno.nombre}</td>
-            <td>${alumno.apellido}</td>
             <td>${alumno.curso}</td>
             <td>${alumno.turno}</td>
             <td>${alumno.notas.Matemáticas.toFixed(1)}</td>
@@ -350,10 +352,8 @@ searchInput.addEventListener("input", function () {
 
     // Normalizamos el curso para la búsqueda "apellido + (parte de) curso"
     const normalizedCursoParaBusqueda = normalizeString(alumno.curso).replace(/[^0-9a-z]/gi, '');
-    const normalizedApellidoCurso = normalizeString(`${alumno.apellido} ${alumno.curso}`);
+    const normalizedApellido = normalizeString(alumno.apellido);
 
-    // Normalizar solo el número del curso para búsquedas como "5"
-    const normalizedCursoSoloNumero = normalizeString(alumno.curso).replace(/[^0-9]/g, '');
 
     const searchParts = normalizedSearchTerm.split(' ').filter(part => part.length > 0);
 
@@ -371,7 +371,7 @@ searchInput.addEventListener("input", function () {
         const searchApellido = searchParts[0];
         const searchCurso = searchParts.slice(1).join(' '); 
 
-        if (normalizeString(alumno.apellido).includes(searchApellido)) {
+        if (normalizedApellido.includes(searchApellido)) {
             if (normalizedCursoParaBusqueda.includes(normalizeString(searchCurso))) {
                 matches = true;
             }
@@ -379,7 +379,7 @@ searchInput.addEventListener("input", function () {
     }
     
     // 3. Permite buscar solo por el número del curso (e.g., "5" o "6")
-    if (!matches && normalizedCursoSoloNumero.includes(normalizedSearchTerm) && normalizedSearchTerm.length > 0) {
+    if (!matches && normalizedCursoParaBusqueda.includes(normalizedSearchTerm) && normalizedSearchTerm.length > 0) {
         matches = true;
     }
 
