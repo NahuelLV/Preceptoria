@@ -1,32 +1,58 @@
-// Datos simulados con responsables
+// Datos simulados (con nombre y apellido separados, DNI y Turno)
 const students = [
   {
-    nombre: "Ana García",
+    nombre: "Ana",
+    apellido: "García",
+    dni: "12345678", // Agregado DNI
     curso: "5° A",
+    turno: "Mañana", // Agregado Turno
     responsables: { responsable1: "Juan García", responsable2: "María López" },
     notas: { Matemáticas: 8.5, Español: 9.0, Ciencias: 7.8 },
-    asistencia: { asistencias: 90, inasistencias: 3, llegadasTarde: 1 },
   },
   {
-    nombre: "Juan Pérez",
+    nombre: "Juan",
+    apellido: "Pérez",
+    dni: "87654321", // Agregado DNI
     curso: "5° B",
+    turno: "Tarde", // Agregado Turno
     responsables: { responsable1: "Carlos Pérez", responsable2: "Laura Fernández" },
     notas: { Matemáticas: 6.0, Español: 7.2, Ciencias: 6.5 },
-    asistencia: { asistencias: 75, inasistencias: 10, llegadasTarde: 5 },
   },
   {
-    nombre: "Lucía Martínez",
+    nombre: "Lucía",
+    apellido: "Martínez",
+    dni: "98765432", // Agregado DNI
     curso: "5° A",
+    turno: "Mañana", // Agregado Turno
     responsables: { responsable1: "José Martínez", responsable2: "Ana Rodríguez" },
     notas: { Matemáticas: 9.2, Español: 8.7, Ciencias: 9.0 },
-    asistencia: { asistencias: 95, inasistencias: 1, llegadasTarde: 0 },
   },
   {
-    nombre: "Carlos Rodríguez",
+    nombre: "Carlos",
+    apellido: "Rodríguez",
+    dni: "23456789", // Agregado DNI
     curso: "5° C",
+    turno: "Tarde", // Agregado Turno
     responsables: { responsable1: "Ricardo Rodríguez", responsable2: "Elena Ruiz" },
     notas: { Matemáticas: 5.5, Español: 6.0, Ciencias: 5.0 },
-    asistencia: { asistencias: 60, inasistencias: 15, llegadasTarde: 7 },
+  },
+   {
+    nombre: "Sofía",
+    apellido: "González",
+    dni: "11223344",
+    curso: "6° A",
+    turno: "Mañana",
+    responsables: { responsable1: "Pedro González", responsable2: "Elena Díaz" },
+    notas: { Matemáticas: 7.0, Español: 8.0, Ciencias: 7.5 },
+  },
+  {
+    nombre: "Pedro",
+    apellido: "López",
+    dni: "55667788",
+    curso: "6° B",
+    turno: "Tarde",
+    responsables: { responsable1: "Mariana López", responsable2: "Jorge Torres" },
+    notas: { Matemáticas: 6.8, Español: 7.5, Ciencias: 6.2 },
   },
 ];
 
@@ -37,7 +63,6 @@ const modalNombre = document.getElementById("modal-nombre");
 const modalCurso = document.getElementById("modal-curso");
 const modalResponsables = document.getElementById("modal-responsables");
 const modalNotas = document.getElementById("modal-notas");
-const modalAsistencia = document.getElementById("modal-asistencia");
 const backBtn = document.getElementById("back-btn");
 const startBtn = document.getElementById("start-btn");
 const menuScreen = document.getElementById("menu-screen");
@@ -48,24 +73,39 @@ const searchInput = document.getElementById("search-input");
 
 let currentSection = '';
 
-// Función para mostrar los datos de los alumnos
-function mostrarDatosAlumnos() {
+// Función para normalizar strings (quitar tildes, convertir a minúsculas y reemplazar '°' por 'to')
+function normalizeString(str) {
+  if (typeof str !== 'string') return '';
+  let normalized = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  // Reemplazar '°' por 'to' específicamente para la normalización del curso
+  normalized = normalized.replace(/°/g, 'to');
+  return normalized;
+}
+
+// Función para mostrar los datos de los alumnos con columnas separadas
+function mostrarDatosAlumnos(alumnosAMostrar = students) {
   contenidoDiv.innerHTML = `
     <table>
       <thead>
         <tr>
-          <th>Alumno</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>DNI</th>
           <th>Curso</th>
+          <th>Turno</th>
           <th>Responsables</th>
         </tr>
       </thead>
       <tbody>
-        ${students
+        ${alumnosAMostrar
           .map(
-            (alumno, index) => `
-          <tr onclick="showModalAlumno(${index})">
+            (alumno) => `
+          <tr onclick="showModalAlumno(${students.indexOf(alumno)})">
             <td>${alumno.nombre}</td>
+            <td>${alumno.apellido}</td>
+            <td>${alumno.dni}</td>
             <td>${alumno.curso}</td>
+            <td>${alumno.turno}</td>
             <td>${alumno.responsables.responsable1} / ${alumno.responsables.responsable2}</td>
           </tr>`
           )
@@ -78,30 +118,20 @@ function mostrarDatosAlumnos() {
 // Función para mostrar el modal con los detalles del alumno
 function showModalAlumno(index) {
   const alumno = students[index];
-  modalNombre.textContent = alumno.nombre;
-  modalCurso.textContent = alumno.curso;
-  
-  // Mostrar los responsables
+  modalNombre.textContent = `${alumno.nombre} ${alumno.apellido}`;
+  modalCurso.innerHTML = `<strong>Curso:</strong> ${alumno.curso}<br><strong>DNI:</strong> ${alumno.dni}<br><strong>Turno:</strong> ${alumno.turno}`;
+
   modalResponsables.innerHTML = `
     <p><strong>Responsable 1:</strong> ${alumno.responsables.responsable1}</p>
     <p><strong>Responsable 2:</strong> ${alumno.responsables.responsable2}</p>
   `;
 
   modalNotas.innerHTML = "";
-  modalAsistencia.innerHTML = "";
 
-  // Mostrar las notas
   for (const [materia, nota] of Object.entries(alumno.notas)) {
     const li = document.createElement("li");
     li.textContent = `${materia}: ${nota.toFixed(1)}`;
     modalNotas.appendChild(li);
-  }
-
-  // Mostrar la asistencia
-  for (const [tipo, cantidad] of Object.entries(alumno.asistencia)) {
-    const li = document.createElement("li");
-    li.textContent = `${tipo.charAt(0).toUpperCase() + tipo.slice(1)}: ${cantidad}`;
-    modalAsistencia.appendChild(li);
   }
 
   modal.style.display = "flex";
@@ -118,7 +148,7 @@ backBtn.onclick = function () {
   menuScreen.classList.add("active");
 };
 
-// Comenzar (Eliminar botón de ingreso y mensaje)
+// Comenzar
 startBtn.onclick = function () {
   welcomeScreen.classList.remove("active");
   menuScreen.classList.add("active");
@@ -131,44 +161,48 @@ menuButtons.forEach((btn) => {
     menuScreen.classList.remove("active");
     contentScreen.classList.add("active");
     renderSection(currentSection);
+    searchInput.value = ''; // Limpiar la búsqueda al cambiar de sección
   };
 });
 
-// Función para renderizar cada sección (alumnos, notas, asistencia)
-function renderSection(section) {
+// Función para renderizar cada sección (alumnos, notas)
+function renderSection(section, studentsToRender = students) {
   switch (section) {
     case "datos":
-      mostrarDatosAlumnos();
+      mostrarDatosAlumnos(studentsToRender);
       break;
     case "notas":
-      mostrarNotas();
-      break;
-    case "asistencia":
-      mostrarAsistencia();
+      mostrarNotas(studentsToRender);
       break;
     default:
       contenidoDiv.innerHTML = "<h3>Funcionalidad en desarrollo...</h3>";
   }
 }
 
-// Mostrar las notas de los estudiantes
-function mostrarNotas() {
+// Mostrar las notas de los estudiantes con columnas separadas
+function mostrarNotas(alumnosAMostrar = students) {
   contenidoDiv.innerHTML = `
     <table>
       <thead>
         <tr>
-          <th>Alumno</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Curso</th>
+          <th>Turno</th>
           <th>Matemáticas</th>
           <th>Español</th>
           <th>Ciencias</th>
         </tr>
       </thead>
       <tbody>
-        ${students
+        ${alumnosAMostrar
           .map(
             (alumno) => `
           <tr onclick="showModalAlumno(${students.indexOf(alumno)})">
             <td>${alumno.nombre}</td>
+            <td>${alumno.apellido}</td>
+            <td>${alumno.curso}</td>
+            <td>${alumno.turno}</td>
             <td>${alumno.notas.Matemáticas.toFixed(1)}</td>
             <td>${alumno.notas.Español.toFixed(1)}</td>
             <td>${alumno.notas.Ciencias.toFixed(1)}</td>
@@ -180,40 +214,58 @@ function mostrarNotas() {
   `;
 }
 
-// Mostrar la asistencia de los estudiantes
-function mostrarAsistencia() {
-  contenidoDiv.innerHTML = `
-    <table>
-      <thead>
-        <tr>
-          <th>Alumno</th>
-          <th>Asistencias</th>
-          <th>Inasistencias</th>
-          <th>Llegadas Tarde</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${students
-          .map(
-            (alumno) => `
-          <tr onclick="showModalAlumno(${students.indexOf(alumno)})">
-            <td>${alumno.nombre}</td>
-            <td class="${alumno.asistencia.asistencias >= 80 ? "attendance-good" : "attendance-bad"}">${alumno.asistencia.asistencias}</td>
-            <td class="${alumno.asistencia.inasistencias > 5 ? "attendance-bad" : "attendance-good"}">${alumno.asistencia.inasistencias}</td>
-            <td class="${alumno.asistencia.llegadasTarde > 3 ? "attendance-bad" : "attendance-good"}">${alumno.asistencia.llegadasTarde}</td>
-          </tr>`
-          )
-          .join("")}
-      </tbody>
-    </table>
-  `;
-}
-
-// Función de búsqueda
+// Función de búsqueda (actualizada para buscar sin tildes, mayúsculas, y con '°' -> 'to')
 searchInput.addEventListener("input", function () {
-  const searchTerm = searchInput.value.toLowerCase();
-  const filteredStudents = students.filter((alumno) =>
-    alumno.nombre.toLowerCase().includes(searchTerm)
-  );
-  mostrarDatosAlumnos(filteredStudents);
+  const normalizedSearchTerm = normalizeString(searchInput.value.trim());
+  
+  const filteredStudents = students.filter((alumno) => {
+    // Normalizar todos los campos de alumno relevantes para la búsqueda
+    const normalizedNombreCompleto = normalizeString(`${alumno.nombre} ${alumno.apellido}`);
+    const normalizedDni = normalizeString(alumno.dni);
+    const normalizedTurno = normalizeString(alumno.turno);
+
+    // Normalizamos el curso para la búsqueda "apellido + (parte de) curso"
+    // `replace(/[^0-9a-z]/gi, '')` quita caracteres como '°', ' '
+    const normalizedCursoParaBusqueda = normalizeString(alumno.curso).replace(/[^0-9a-z]/gi, '');
+    const normalizedApellidoCurso = normalizeString(`${alumno.apellido} ${alumno.curso}`);
+
+    // Normalizar solo el número del curso para búsquedas como "5"
+    const normalizedCursoSoloNumero = normalizeString(alumno.curso).replace(/[^0-9]/g, '');
+
+    const searchParts = normalizedSearchTerm.split(' ').filter(part => part.length > 0);
+
+    let matches = false;
+
+    // 1. Coincidencia por nombre completo, DNI o turno (todo normalizado)
+    if (normalizedNombreCompleto.includes(normalizedSearchTerm) ||
+        normalizedDni.includes(normalizedSearchTerm) ||
+        normalizedTurno.includes(normalizedSearchTerm)) {
+        matches = true;
+    }
+
+    // 2. Coincidencia para "apellido + curso" (todo normalizado)
+    // Esto es para cuando el usuario busca "garcia 5to año" o "perez 6"
+    if (!matches && searchParts.length >= 2) {
+        const searchApellido = searchParts[0];
+        const searchCurso = searchParts.slice(1).join(' '); // El resto es el curso, también normalizado
+
+        if (normalizeString(alumno.apellido).includes(searchApellido)) {
+            // Permitir que "5to año" coincida con "5a", "5b", etc. normalizados
+            // Aquí, `normalizedCursoParaBusqueda` ya tiene el '°' reemplazado por 'to'
+            if (normalizedCursoParaBusqueda.includes(normalizeString(searchCurso))) {
+                matches = true;
+            }
+        }
+    }
+    
+    // 3. Permite buscar solo por el número del curso (e.g., "5" o "6")
+    if (!matches && normalizedCursoSoloNumero.includes(normalizedSearchTerm) && normalizedSearchTerm.length > 0) {
+        matches = true;
+    }
+
+    return matches;
+  });
+
+  // Renderiza la sección actual con los estudiantes filtrados
+  renderSection(currentSection, filteredStudents);
 });
