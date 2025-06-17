@@ -24,12 +24,7 @@
     <section id="content-screen" class="screen">
       <div class="top-bar">
         <button id="back-btn" class="btn back-btn">&larr; Volver al Menú</button>
-        <div class="search-controls"> <select id="search-type" class="search-select">
-            <option value="nombre-apellido">Nombre y Apellido</option>
-            <option value="dni">DNI</option>
-            <option value="curso-apellido">Curso + Apellido</option>
-            <option value="turno">Turno</option>
-          </select>
+        <div class="search-controls">
           <input type="text" id="search-input" placeholder="Buscar..." />
         </div>
       </div>
@@ -41,8 +36,8 @@
     <div class="modal-content">
       <span id="modal-close" class="modal-close">&times;</span>
       <h3 id="modal-nombre"></h3>
-      <p><strong>Curso:</strong> <span id="modal-curso"></span></p>
-      <p><strong>DNI:</strong> <span id="modal-dni"></span></p> <p><strong>Turno:</strong> <span id="modal-turno"></span></p> <div id="modal-responsables"></div>
+      <p id="modal-curso"></p>
+      <div id="modal-responsables"></div>
       <h4>Notas</h4>
       <ul id="modal-notas"></ul>
     </div>
