@@ -202,3 +202,16 @@ tbody td {
   border-bottom: 1px solid #D32F2F;
   padding-bottom: 4px;
 }
+
+/* Estilos para los datos de responsables en el modal */
+.responsable-item {
+  margin-bottom: 15px; /* Espacio entre cada responsable */
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #555; /* Línea divisoria */
+}
+
+.responsable-item:last-child {
+  border-bottom: none; /* No hay línea divisoria para el último */
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
