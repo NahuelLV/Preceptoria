@@ -6,7 +6,7 @@ const students = [
     dni: "12345678",
     curso: "5° A",
     turno: "Mañana",
-    responsables: [ // Cambiado a un array para múltiples responsables
+    responsables: [
       {
         nombre: "Juan",
         apellido: "García",
@@ -24,7 +24,7 @@ const students = [
         email: "maria.lopez@example.com"
       }
     ],
-    notas: { Matemáticas: 8.5, Español: 9.0, Ciencias: 7.8 },
+    notas: { Matemáticas: 8.5, Español: 9.0, Ciencias: 7.8, Historia: 6.0 }, // Agregué Historia para ejemplo
   },
   {
     nombre: "Juan",
@@ -50,7 +50,7 @@ const students = [
         email: "laura.fernandez@example.com"
       }
     ],
-    notas: { Matemáticas: 6.0, Español: 7.2, Ciencias: 6.5 },
+    notas: { Matemáticas: 6.0, Español: 7.2, Ciencias: 6.5, Geografía: 4.5 }, // Notas bajas
   },
   {
     nombre: "Lucía",
@@ -67,7 +67,7 @@ const students = [
         dni: "28901234",
         email: "jose.martinez@example.com"
       }
-    ], // Un solo responsable para este ejemplo
+    ],
     notas: { Matemáticas: 9.2, Español: 8.7, Ciencias: 9.0 },
   },
   {
@@ -94,7 +94,7 @@ const students = [
         email: "elena.ruiz@example.com"
       }
     ],
-    notas: { Matemáticas: 5.5, Español: 6.0, Ciencias: 5.0 },
+    notas: { Matemáticas: 5.5, Español: 6.0, Ciencias: 5.0, Música: 7.0 },
   },
    {
     nombre: "Sofía",
@@ -146,7 +146,7 @@ const students = [
         email: "jorge.torres@example.com"
       }
     ],
-    notas: { Matemáticas: 6.8, Español: 7.5, Ciencias: 6.2 },
+    notas: { Matemáticas: 6.8, Español: 7.5, Ciencias: 6.2, Arte: 5.9 }, // Agregué Arte para ejemplo
   },
 ];
 
@@ -166,6 +166,9 @@ const menuButtons = document.querySelectorAll(".menu-btn");
 const searchInput = document.getElementById("search-input");
 
 let currentSection = '';
+
+// UMTRAL DE NOTA DE APROBACIÓN
+const NOTA_MINIMA_APROBACION = 7.0; // Puedes cambiar este valor según la normativa de tu colegio
 
 // Función para normalizar strings (quitar tildes, convertir a minúsculas y reemplazar '°' por 'to')
 function normalizeString(str) {
@@ -214,8 +217,24 @@ function showModalAlumno(index) {
   const alumno = students[index];
   modalNombre.textContent = `${alumno.nombre} ${alumno.apellido}`;
   
-  // Mostrar Curso, DNI y Turno del alumno. El DNI solo se muestra aquí.
-  modalCurso.innerHTML = `<strong>Curso:</strong> ${alumno.curso}<br><strong>DNI:</strong> ${alumno.dni}<br><strong>Turno:</strong> ${alumno.turno}`;
+  // Mostrar Curso, DNI y Turno del alumno.
+  let studentDetailsHtml = `<strong>Curso:</strong> ${alumno.curso}<br><strong>DNI:</strong> ${alumno.dni}<br><strong>Turno:</strong> ${alumno.turno}`;
+
+  // Verificar materias que debe el alumno
+  const materiasADeber = [];
+  for (const [materia, nota] of Object.entries(alumno.notas)) {
+    if (nota < NOTA_MINIMA_APROBACION) {
+      materiasADeber.push(`${materia} (${nota.toFixed(1)})`);
+    }
+  }
+
+  if (materiasADeber.length > 0) {
+    studentDetailsHtml += `<br><br><strong>Materias a Recuperar:</strong><br>${materiasADeber.join('<br>')}`;
+  } else {
+    studentDetailsHtml += `<br><br><strong>Materias a Recuperar:</strong> Ninguna`;
+  }
+
+  modalCurso.innerHTML = studentDetailsHtml;
 
   modalResponsables.innerHTML = "<h4>Responsables</h4>"; // Título para la sección de responsables
   alumno.responsables.forEach((resp, i) => {
@@ -232,6 +251,7 @@ function showModalAlumno(index) {
   });
   
   modalNotas.innerHTML = ""; // Limpiar notas previas
+  // Las notas se muestran en una lista aparte para mantener la sección de "Materias a Recuperar" limpia
   for (const [materia, nota] of Object.entries(alumno.notas)) {
     const li = document.createElement("li");
     li.textContent = `${materia}: ${nota.toFixed(1)}`;
@@ -362,8 +382,6 @@ searchInput.addEventListener("input", function () {
     if (!matches && normalizedCursoSoloNumero.includes(normalizedSearchTerm) && normalizedSearchTerm.length > 0) {
         matches = true;
     }
-
-    // *** ELIMINADA LA SECCIÓN DE BÚSQUEDA DENTRO DE LOS RESPONSABLES ***
 
     return matches;
   });
