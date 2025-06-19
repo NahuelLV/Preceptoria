@@ -1,4 +1,4 @@
-const students = [Add commentMore actions
+const students = [
   {
     nombre: "Ana",
     apellido: "García",
@@ -26,100 +26,56 @@ const students = [Add commentMore actions
     notas: { Matemáticas: 8.5, Español: 9.0, Ciencias: 7.8, Historia: 6.0 }, 
   },
   {
-    nombre: "Juan",
-    apellido: "Pérez",
+    nombre: "Carlos",
+    apellido: "Fernández",
     dni: "87654321",
     curso: "5° B",
     turno: "Tarde",
     responsables: [
       {
-        nombre: "Carlos",
-        apellido: "Pérez",
-        parentesco: "Padre",
-        telefono: "1155443322",
-        dni: "22334455",
-        email: "carlos.perez@example.com"
-      },
-      {
         nombre: "Laura",
         apellido: "Fernández",
         parentesco: "Madre",
-        telefono: "1166778899",
-        dni: "27890123",
+        telefono: "1144778899",
+        dni: "27894512",
         email: "laura.fernandez@example.com"
-      }
-    ],
-    notas: { Matemáticas: 6.0, Español: 7.2, Ciencias: 6.5, Geografía: 4.5 }, 
-  },
-  {
-    nombre: "Lucía",
-    apellido: "Martínez",
-    dni: "98765432",
-    curso: "5° A",
-    turno: "Mañana",
-    responsables: [
-      {
-        nombre: "José",
-        apellido: "Martínez",
-        parentesco: "Tutor",
-        telefono: "1111223344",
-        dni: "28901234",
-        email: "jose.martinez@example.com"
-      }
-    ],
-    notas: { Matemáticas: 9.2, Español: 8.7, Ciencias: 9.0 },
-  },
-  {
-    nombre: "Carlos",
-    apellido: "Rodríguez",
-    dni: "23456789",
-    curso: "5° C",
-    turno: "Tarde",
-    responsables: [
-      {
-        nombre: "Ricardo",
-        apellido: "Rodríguez",
-        parentesco: "Padre",
-        telefono: "1144556677",
-        dni: "29012345",
-        email: "ricardo.rodriguez@example.com"
       },
       {
-        nombre: "Elena",
-        apellido: "Ruiz",
-        parentesco: "Madre",
-        telefono: "1177889900",
-        dni: "30123456",
-        email: "elena.ruiz@example.com"
+        nombre: "Miguel",
+        apellido: "Gómez",
+        parentesco: "Padre",
+        telefono: "1177553311",
+        dni: "29874561",
+        email: "miguel.gomez@example.com"
       }
     ],
-    notas: { Matemáticas: 5.5, Español: 6.0, Ciencias: 5.0, Música: 7.0 },
+    notas: { Matemáticas: 5.2, Español: 6.8, Ciencias: 5.5, Historia: 7.0 }, 
   },
-    {
+  {
     nombre: "Sofía",
-    apellido: "González",
-    dni: "11223344",
+    apellido: "Ramírez",
+    dni: "33445566",
     curso: "6° A",
     turno: "Mañana",
     responsables: [
       {
-        nombre: "Pedro",
-        apellido: "González",
-        parentesco: "Padre",
-        telefono: "1122334455",
-        dni: "35467890",
-        email: "pedro.gonzalez@example.com"
+        nombre: "Elena",
+        apellido: "Ramírez",
+        parentesco: "Madre",
+        telefono: "1133224455",
+        dni: "27654321",
+        email: "elena.ramirez@example.com"
       },
       {
-        nombre: "Elena",
-        apellido: "Díaz",
-        parentesco: "Madre",
-        telefono: "1199887766",
-        dni: "36578901",
-        email: "elena.diaz@example.com"
+        nombre: "Roberto",
+        apellido: "Sánchez",
+        parentesco: "Padre",
+        telefono: "1188997766",
+        dni: "25671234",
+        email: "roberto.sanchez@example.com"
       }
     ],
-    notas: { Matemáticas: 7.0, Español: 8.0, Ciencias: 7.5 },
+    notas: { Matemáticas: 9.0, Español: 8.5, Ciencias: 9.2, Historia: 9.0 }, 
   },
   {
     nombre: "Pedro",
@@ -150,197 +106,264 @@ const students = [Add commentMore actions
 ];
 
 const contenidoDiv = document.getElementById("content");
-const modal = document.getElementById("modal");
-const modalClose = document.getElementById("modal-close");
-const modalNombre = document.getElementById("modal-nombre");
-const modalCurso = document.getElementById("modal-curso");
-const modalResponsables = document.getElementById("modal-responsables");
-const modalNotas = document.getElementById("modal-notas");
-const backBtn = document.getElementById("back-btn");
-const startBtn = document.getElementById("start-btn");
+
+const welcomeScreen = document.getElementById("welcome-screen");
 const menuScreen = document.getElementById("menu-screen");
 const contentScreen = document.getElementById("content-screen");
-const welcomeScreen = document.getElementById("welcome-screen");
-const menuButtons = document.querySelectorAll(".menu-btn");
-const searchInput = document.getElementById("search-input");
 
-let currentSection = '';
+const startBtn = document.getElementById("start-btn");
+const backBtn = document.getElementById("back-btn");
 
-const NOTA_MINIMA_APROBACION = 6.0; 
+const searchName = document.getElementById("search-name");
+const searchDni = document.getElementById("search-dni");
+const searchCurso = document.getElementById("search-curso");
 
-function normalizeString(str) {
-  if (typeof str !== 'string') return '';
-  let normalized = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-  normalized = normalized.replace(/°/g, 'to');
-  return normalized;
+let currentSection = null;
+let filteredStudents = [];
+
+function showScreen(screen) {
+  [welcomeScreen, menuScreen, contentScreen].forEach(s => s.classList.remove("active"));
+  screen.classList.add("active");
 }
 
-function mostrarDatosAlumnos(alumnosAMostrar = students) {
-  contenidoDiv.innerHTML = `
-    <table>
-      <thead>
-        <tr>
-          <th>Apellido</th>
-          <th>Nombre</th>
-          <th>DNI</th>
-          <th>Curso</th>
-          <th>Turno</th>
-          <th>Responsable 1</th>
-          <th>Responsable 2</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${alumnosAMostrar
-          .map(
-            (alumno) => `
-          <tr onclick="showModalAlumno(${students.indexOf(alumno)})">
-            <td>${alumno.apellido.toUpperCase()}</td>
-            <td>${alumno.nombre}</td>
-            <td>${alumno.dni}</td>
-            <td>${alumno.curso}</td>
-            <td>${alumno.turno}</td>
-            <td>${alumno.responsables[0] ? alumno.responsables[0].nombre + ' ' + alumno.responsables[0].apellido : ''}</td>
-            <td>${alumno.responsables[1] ? alumno.responsables[1].nombre + ' ' + alumno.responsables[1].apellido : ''}</td>
-          </tr>`
-          )
-          .join("")}
-      </tbody>
-    </table>
-  `;
-}
+function renderDatos(data) {
+  contenidoDiv.innerHTML = "";
+  const table = document.createElement("table");
+  const thead = document.createElement("thead");
+  const trHead = document.createElement("tr");
 
-function showModalAlumno(index) {
-  const alumno = students[index];
-  modalNombre.textContent = `${alumno.apellido.toUpperCase()}, ${alumno.nombre}`;
-  
-  let studentDetailsHtml = `<strong>Curso:</strong> ${alumno.curso}<br><strong>DNI:</strong> ${alumno.dni}<br><strong>Turno:</strong> ${alumno.turno}`;
+  const columns = [
+    { header: "Nombre", key: "nombre" },
+    { header: "Apellido", key: "apellido" },
+    { header: "DNI", key: "dni" },
+    { header: "Curso", key: "curso" },
+    { header: "Turno", key: "turno" },
+    { header: "Responsable 1", key: "responsable1" },
+    { header: "Responsable 2", key: "responsable2" }
+  ];
 
-  const materiasADeber = [];
-  for (const [materia, nota] of Object.entries(alumno.notas)) {
-    if (nota < NOTA_MINIMA_APROBACION) {
-      materiasADeber.push(`${materia} (${nota.toFixed(1)})`);
-    }
-  }
-
-  if (materiasADeber.length > 0) {
-    studentDetailsHtml += `<br><br><strong>Materias a Recuperar:</strong><br>${materiasADeber.join('<br>')}`;
-  } else {
-    studentDetailsHtml += `<br><br><strong>Materias a Recuperar:</strong> Ninguna`;
-  }
-
-  modalCurso.innerHTML = studentDetailsHtml;
-  modalResponsables.innerHTML = "<h4>Responsables</h4>"; 
-  alumno.responsables.forEach((resp, i) => {
-    modalResponsables.innerHTML += `
-      <div class="responsable-item">
-        <p><strong>Responsable ${i + 1}:</strong></p>
-        <p><strong>Nombre:</strong> ${resp.nombre} ${resp.apellido}</p>
-        <p><strong>Parentesco:</strong> ${resp.parentesco}</p>
-        <p><strong>Teléfono:</strong> ${resp.telefono}</p>
-        <p><strong>DNI:</strong> ${resp.dni}</p>
-        <p><strong>Email:</strong> ${resp.email}</p>
-      </div>
-    `;
+  columns.forEach(col => {
+    const th = document.createElement("th");
+    th.textContent = col.header;
+    trHead.appendChild(th);
   });
-  
-  modalNotas.innerHTML = ""; 
-  for (const [materia, nota] of Object.entries(alumno.notas)) {
-    const li = document.createElement("li");
-    li.textContent = `${materia}: ${nota.toFixed(1)}`;
-    modalNotas.appendChild(li);
-  }
+  thead.appendChild(trHead);
+  table.appendChild(thead);
 
-  modal.style.display = "flex";
+  const tbody = document.createElement("tbody");
 
+  data.forEach(s => {
+    const tr = document.createElement("tr");
+
+    tr.appendChild(tdWithText(s.nombre));
+    tr.appendChild(tdWithText(s.apellido));
+    tr.appendChild(tdWithText(s.dni));
+    tr.appendChild(tdWithText(s.curso));
+    tr.appendChild(tdWithText(s.turno));
+
+    const res1 = s.responsables[0] ? `${s.responsables[0].nombre} (${s.responsables[0].parentesco})` : "";
+    const res2 = s.responsables[1] ? `${s.responsables[1].nombre} (${s.responsables[1].parentesco})` : "";
+    tr.appendChild(tdWithText(res1));
+    tr.appendChild(tdWithText(res2));
+
+    tr.style.cursor = "pointer";
+    tr.addEventListener("click", () => showAlumnoDetalle(s));
+
+    tbody.appendChild(tr);
+  });
+
+  table.appendChild(tbody);
+  contenidoDiv.appendChild(table);
 }
 
-modalClose.onclick = function () {
-  modal.style.display = "none";
-};
+function renderNotas(data) {
+  contenidoDiv.innerHTML = "";
+  const table = document.createElement("table");
+  const thead = document.createElement("thead");
+  const trHead = document.createElement("tr");
 
-backBtn.onclick = function () {
-  contentScreen.classList.remove("active");
-  menuScreen.classList.add("active");
-};
+  const subjects = new Set();
+  data.forEach(s => {
+    Object.keys(s.notas).forEach(sub => subjects.add(sub));
+  });
+  const subjectList = Array.from(subjects).sort();
 
+  const headers = ["Nombre", "Apellido", "Curso", "Turno", ...subjectList];
+  headers.forEach(hdr => {
+    const th = document.createElement("th");
+    th.textContent = hdr;
+    trHead.appendChild(th);
+  });
+  thead.appendChild(trHead);
+  table.appendChild(thead);
 
-startBtn.onclick = function () {
-  welcomeScreen.classList.remove("active");
-  menuScreen.classList.add("active");
-};
+  const tbody = document.createElement("tbody");
+  data.forEach(s => {
+    const tr = document.createElement("tr");
+    tr.appendChild(tdWithText(s.nombre));
+    tr.appendChild(tdWithText(s.apellido));
+    tr.appendChild(tdWithText(s.curso));
+    tr.appendChild(tdWithText(s.turno));
+    subjectList.forEach(sub => {
+      const nota = s.notas[sub];
+      const td = document.createElement("td");
+      if(nota !== undefined){
+        td.textContent = nota;
+        if(nota < 6){
+          td.style.color = "#D32F2F";
+          td.style.fontWeight = "bold";
+        }
+      }
+      tr.appendChild(td);
+    });
+    tr.style.cursor = "pointer";
+    tr.addEventListener("click", () => showAlumnoDetalle(s));
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  contenidoDiv.appendChild(table);
+}
 
-menuButtons.forEach((btn) => {
-  btn.onclick = function () {
-    currentSection = btn.dataset.section;
-    menuScreen.classList.remove("active");
-    contentScreen.classList.add("active");
-    renderSection(currentSection);
-    searchInput.value = ''; 
+function tdWithText(text) {
+  const td = document.createElement("td");
+  td.textContent = text;
+  return td;
+}
+
+  contenidoDiv.innerHTML = "";
+  const datosDiv = document.createElement("div");
+  datosDiv.style.color = "#eee";
+  datosDiv.style.textAlign = "left";
+  datosDiv.style.padding = "10px 0";
+
+  const addItem = (label, value) => {
+    const p = document.createElement("p");
+    p.style.marginBottom = "12px";
+    p.innerHTML = `<strong style="color:#D32F2F;">${label}:</strong> ${value}`;
+    datosDiv.appendChild(p);
   };
-});
 
-function renderSection(section, studentsToRender = students) {
-  switch (section) {
-    case "datos":
-      mostrarDatosAlumnos(studentsToRender);
-      break;
-    case "notas":
-      mostrarNotas(studentsToRender);
-      break;
-    default:
-      contenidoDiv.innerHTML = "<h3>Funcionalidad en desarrollo...</h3>";
+  addItem("Nombre", alumno.nombre);
+  addItem("Apellido", alumno.apellido);
+  addItem("DNI", alumno.dni);
+  addItem("Curso", alumno.curso);
+  addItem("Turno", alumno.turno);
+
+  alumno.responsables.forEach((r, i) => {
+    addItem(`Responsable ${i + 1}`, `${r.nombre} ${r.apellido} (${r.parentesco})`);
+    addItem(`Teléfono`, r.telefono);
+    addItem(`DNI Responsable`, r.dni);
+    addItem(`Email`, `<a href="mailto:${r.email}" style="color:#1976D2;">${r.email}</a>`);
+  });
+
+  const desaprobadas = Object.entries(alumno.notas).filter(([mat, nota]) => nota < 6);
+  if (desaprobadas.length > 0) {
+    const h4 = document.createElement("h4");
+    h4.textContent = "Notas desaprobadas:";
+    h4.style.color = "#D32F2F";
+    h4.style.marginTop = "25px";
+    datosDiv.appendChild(h4);
+
+    desaprobadas.forEach(([mat, nota]) => {
+      addItem(mat, nota);
+    });
+  } else {
+    const p = document.createElement("p");
+    p.textContent = "No tiene notas desaprobadas.";
+    p.style.marginTop = "25px";
+    datosDiv.appendChild(p);
+  }
+
+  contenidoDiv.appendChild(datosDiv);
+}
+
+function showDatos() {
+  currentSection = "datos";
+  clearSearchInputs();
+  filteredStudents = [...students];
+  renderDatos(filteredStudents);
+  showScreen(contentScreen);
+}
+
+function showNotas() {
+  currentSection = "notas";
+  clearSearchInputs();
+  filteredStudents = [...students];
+  renderNotas(filteredStudents);
+  showScreen(contentScreen);
+}
+
+function clearSearchInputs() {
+  searchName.value = "";
+  searchDni.value = "";
+  searchCurso.value = "";
+}
+
+function filterStudents() {
+  const nameQuery = searchName.value.trim().toLowerCase();
+  const dniQuery = searchDni.value.trim();
+  const cursoQueryRaw = searchCurso.value.trim().toLowerCase();
+
+  let cursoQuery = "";
+  let divisionQuery = "";
+  if(cursoQueryRaw){
+    const parts = cursoQueryRaw.split(" ");
+    cursoQuery = parts[0];
+    divisionQuery = parts[1] || "";
+  }
+
+  filteredStudents = students.filter(s => {
+    const matchName = nameQuery === "" || 
+      (`${s.nombre} ${s.apellido}`).toLowerCase().includes(nameQuery);
+
+    const matchDni = dniQuery === "" || s.dni.includes(dniQuery);
+
+    let matchCurso = true;
+    if(cursoQuery){
+      const cursoSplit = s.curso.toLowerCase().split(" ");
+      const cursoPart = cursoSplit[0];
+      const divisionPart = cursoSplit[1] || "";
+      matchCurso = cursoPart.includes(cursoQuery);
+      if(divisionQuery){
+        matchCurso = matchCurso && divisionPart.includes(divisionQuery);
+      }
+    }
+
+    return matchName && matchDni && matchCurso;
+  });
+
+  if (currentSection === "datos") {
+    renderDatos(filteredStudents);
+  } else if (currentSection === "notas") {
+    renderNotas(filteredStudents);
   }
 }
 
-function mostrarNotas(alumnosAMostrar = students) {
-  contenidoDiv.innerHTML = `
-    <table>
-      <thead>
-        <tr>
-          <th>Apellido</th>
-          <th>Nombre</th>
-          <th>Curso</th>
-          <th>Turno</th>
-          <th>Matemáticas</th>
-          <th>Español</th>
-          <th>Ciencias</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${alumnosAMostrar
-          .map(
-            (alumno) => `
-          <tr onclick="showModalAlumno(${students.indexOf(alumno)})">
-            <td>${alumno.apellido.toUpperCase()}</td>
-            <td>${alumno.nombre}</td>
-            <td>${alumno.curso}</td>
-            <td>${alumno.turno}</td>
-            <td>${alumno.notas.Matemáticas.toFixed(1)}</td>
-            <td>${alumno.notas.Español.toFixed(1)}</td>
-            <td>${alumno.notas.Ciencias.toFixed(1)}</td>
-          </tr>`
-          )
-          .join("")}
-      </tbody>
-    </table>
-  `;
-}
+startBtn.addEventListener("click", () => {
+  showScreen(menuScreen);
+});
 
-searchInput.addEventListener("input", function () {
-  const normalizedSearchTerm = normalizeString(searchInput.value.trim());
-  const searchParts = normalizedSearchTerm.split(' ').filter(part => part.length > 0);
-  const filteredStudents = students.filter((alumno) => {
-    const combinedFields = normalizeString(
-      `${alumno.nombre} ${alumno.apellido} ${alumno.dni} ${alumno.curso} ${alumno.turno}`
-    );
-    return searchParts.every(part => combinedFields.includes(part));
+backBtn.addEventListener("click", () => {
+  showScreen(menuScreen);
+  contenidoDiv.innerHTML = "";
+  clearSearchInputs();
+});
+
+document.querySelectorAll(".menu-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const section = btn.getAttribute("data-section");
+    if (section === "datos") {
+      showDatos();
+    } else if (section === "notas") {
+      showNotas();
+    }
   });
-
-  renderSection(currentSection, filteredStudents);
 });
 
-  renderSection(currentSection, filteredStudents);
+[searchName, searchDni, searchCurso].forEach(input => {
+  input.addEventListener("input", () => {
+    filterStudents();
+  });
 });
 
-
-
+showScreen(welcomeScreen);
