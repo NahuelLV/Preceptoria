@@ -94,12 +94,21 @@ h2 {
   box-shadow: 0 4px 10px rgba(25, 118, 210, 0.8);
 }
 
-#search-input {
+.search-controls {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0;
+}
+
+.search-controls input {
   padding: 10px 15px;
   font-size: 1rem;
   border-radius: 6px;
   border: none;
-  width: 230px;
+  width: 200px;
   outline: none;
   box-shadow: 0 0 10px #1976D2;
   background-color: #222;
@@ -107,11 +116,9 @@ h2 {
   transition: box-shadow 0.3s;
 }
 
-#search-input:focus {
+.search-controls input:focus {
   box-shadow: 0 0 12px #D32F2F;
 }
-
-
 
 table {
   width: 100%;
@@ -148,8 +155,6 @@ tbody td {
   border-bottom: 1px solid #444;
   color: #eee;
 }
-
-
 
 .modal {
   display: none;
@@ -209,7 +214,7 @@ tbody td {
 }
 
 .responsable-item:last-child {
-  border-bottom: none; /* No hay línea divisoria para el último */
+  border-bottom: none; 
   margin-bottom: 0;
   padding-bottom: 0;
 }
