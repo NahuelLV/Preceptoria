@@ -367,3 +367,4 @@ document.querySelectorAll(".menu-btn").forEach(btn => {
 });
 
 showScreen(welcomeScreen);
+});
