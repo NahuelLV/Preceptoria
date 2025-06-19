@@ -166,18 +166,14 @@ const searchInput = document.getElementById("search-input");
 
 let currentSection = '';
 
-
 const NOTA_MINIMA_APROBACION = 6.0; 
-
 
 function normalizeString(str) {
   if (typeof str !== 'string') return '';
   let normalized = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
- 
   normalized = normalized.replace(/°/g, 'to');
   return normalized;
 }
-
 
 function mostrarDatosAlumnos(alumnosAMostrar = students) {
   contenidoDiv.innerHTML = `
@@ -258,17 +254,14 @@ function showModalAlumno(index) {
   modal.style.display = "flex";
 }
 
-
 modalClose.onclick = function () {
   modal.style.display = "none";
 };
-
 
 backBtn.onclick = function () {
   contentScreen.classList.remove("active");
   menuScreen.classList.add("active");
 };
-
 
 startBtn.onclick = function () {
   welcomeScreen.classList.remove("active");
@@ -285,7 +278,6 @@ menuButtons.forEach((btn) => {
   };
 });
 
-
 function renderSection(section, studentsToRender = students) {
   switch (section) {
     case "datos":
@@ -298,7 +290,6 @@ function renderSection(section, studentsToRender = students) {
       contenidoDiv.innerHTML = "<h3>Funcionalidad en desarrollo...</h3>";
   }
 }
-
 
 function mostrarNotas(alumnosAMostrar = students) {
   contenidoDiv.innerHTML = `
@@ -334,52 +325,25 @@ function mostrarNotas(alumnosAMostrar = students) {
   `;
 }
 
-
 searchInput.addEventListener("input", function () {
   const normalizedSearchTerm = normalizeString(searchInput.value.trim());
-  
+
+ 
+  const searchParts = normalizedSearchTerm.split(' ').filter(part => part.length > 0);
+
   const filteredStudents = students.filter((alumno) => {
-    
-    const normalizedNombreCompleto = normalizeString(`${alumno.nombre} ${alumno.apellido}`);
-    const normalizedDni = normalizeString(alumno.dni);
-    const normalizedTurno = normalizeString(alumno.turno);
 
-    
-    const normalizedCursoParaBusqueda = normalizeString(alumno.curso).replace(/[^0-9a-z]/gi, '');
-    const normalizedApellido = normalizeString(alumno.apellido);
+    const combinedFields = normalizeString(
+      `${alumno.nombre} ${alumno.apellido} ${alumno.dni} ${alumno.curso} ${alumno.turno}`
+    );
 
-
-    const searchParts = normalizedSearchTerm.split(' ').filter(part => part.length > 0);
-
-    let matches = false;
-
-  
-    if (normalizedNombreCompleto.includes(normalizedSearchTerm) ||
-        normalizedDni.includes(normalizedSearchTerm) ||
-        normalizedTurno.includes(normalizedSearchTerm)) {
-        matches = true;
-    }
-
-    
-    if (!matches && searchParts.length >= 2) {
-        const searchApellido = searchParts[0];
-        const searchCurso = searchParts.slice(1).join(' '); 
-
-        if (normalizedApellido.includes(searchApellido)) {
-            if (normalizedCursoParaBusqueda.includes(normalizeString(searchCurso))) {
-                matches = true;
-            }
-        }
-    }
-    
-    
-    if (!matches && normalizedCursoParaBusqueda.includes(normalizedSearchTerm) && normalizedSearchTerm.length > 0) {
-        matches = true;
-    }
-
-    return matches;
-    
+   
+    return searchParts.every(part => combinedFields.includes(part));
   });
+
+  renderSection(currentSection, filteredStudents);
+});
+
 
   renderSection(currentSection, filteredStudents);
 });
