@@ -126,6 +126,12 @@ function showScreen(screen) {
   screen.classList.add("active");
 }
 
+function tdWithText(text) {
+  const td = document.createElement("td");
+  td.textContent = text;
+  return td;
+}
+
 function renderDatos(data) {
   contenidoDiv.innerHTML = "";
   const table = document.createElement("table");
@@ -224,12 +230,7 @@ function renderNotas(data) {
   contenidoDiv.appendChild(table);
 }
 
-function tdWithText(text) {
-  const td = document.createElement("td");
-  td.textContent = text;
-  return td;
-}
-
+function showAlumnoDetalle(alumno) {
   contenidoDiv.innerHTML = "";
   const datosDiv = document.createElement("div");
   datosDiv.style.color = "#eee";
@@ -367,4 +368,3 @@ document.querySelectorAll(".menu-btn").forEach(btn => {
 });
 
 showScreen(welcomeScreen);
-});
