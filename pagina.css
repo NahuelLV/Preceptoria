@@ -218,3 +218,9 @@ tbody td {
   margin-bottom: 0;
   padding-bottom: 0;
 }
+
+#modal-detalles p {
+  margin-bottom: 8px;
+  text-align: left;
+  line-height: 1.3;
+}
