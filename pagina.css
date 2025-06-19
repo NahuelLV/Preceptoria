@@ -1,4 +1,3 @@
-/* Reset y estilos generales */
 * {
   margin: 0; padding: 0; box-sizing: border-box;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -112,7 +111,7 @@ h2 {
   box-shadow: 0 0 12px #D32F2F;
 }
 
-/* Tablas */
+
 
 table {
   width: 100%;
@@ -150,7 +149,7 @@ tbody td {
   color: #eee;
 }
 
-/* Modal */
+
 
 .modal {
   display: none;
@@ -203,11 +202,10 @@ tbody td {
   padding-bottom: 4px;
 }
 
-/* Estilos para los datos de responsables en el modal */
 .responsable-item {
-  margin-bottom: 15px; /* Espacio entre cada responsable */
+  margin-bottom: 15px; 
   padding-bottom: 10px;
-  border-bottom: 1px dashed #555; /* Línea divisoria */
+  border-bottom: 1px dashed #555; 
 }
 
 .responsable-item:last-child {
