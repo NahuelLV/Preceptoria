@@ -1,4 +1,3 @@
-// Datos simulados (con DNI y Turno, y datos completos de responsables)
 const students = [
   {
     nombre: "Ana",
@@ -24,7 +23,7 @@ const students = [
         email: "maria.lopez@example.com"
       }
     ],
-    notas: { Matemáticas: 8.5, Español: 9.0, Ciencias: 7.8, Historia: 6.0 }, // Agregué Historia para ejemplo
+    notas: { Matemáticas: 8.5, Español: 9.0, Ciencias: 7.8, Historia: 6.0 }, 
   },
   {
     nombre: "Juan",
@@ -50,7 +49,7 @@ const students = [
         email: "laura.fernandez@example.com"
       }
     ],
-    notas: { Matemáticas: 6.0, Español: 7.2, Ciencias: 6.5, Geografía: 4.5 }, // Notas bajas
+    notas: { Matemáticas: 6.0, Español: 7.2, Ciencias: 6.5, Geografía: 4.5 }, 
   },
   {
     nombre: "Lucía",
@@ -146,7 +145,7 @@ const students = [
         email: "jorge.torres@example.com"
       }
     ],
-    notas: { Matemáticas: 6.8, Español: 7.5, Ciencias: 6.2, Arte: 5.9 }, // Agregué Arte para ejemplo
+    notas: { Matemáticas: 6.8, Español: 7.5, Ciencias: 6.2, Arte: 5.9 }, 
   },
 ];
 
@@ -167,19 +166,19 @@ const searchInput = document.getElementById("search-input");
 
 let currentSection = '';
 
-// UMTRAL DE NOTA DE APROBACIÓN
-const NOTA_MINIMA_APROBACION = 7.0; // Puedes cambiar este valor según la normativa de tu colegio
 
-// Función para normalizar strings (quitar tildes, convertir a minúsculas y reemplazar '°' por 'to')
+const NOTA_MINIMA_APROBACION = 6.0; 
+
+
 function normalizeString(str) {
   if (typeof str !== 'string') return '';
   let normalized = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-  // Reemplazar '°' por 'to' específicamente para la normalización del curso
+ 
   normalized = normalized.replace(/°/g, 'to');
   return normalized;
 }
 
-// Función para mostrar los datos de los alumnos con columnas separadas
+
 function mostrarDatosAlumnos(alumnosAMostrar = students) {
   contenidoDiv.innerHTML = `
     <table>
@@ -214,15 +213,12 @@ function mostrarDatosAlumnos(alumnosAMostrar = students) {
   `;
 }
 
-// Función para mostrar el modal con los detalles del alumno
 function showModalAlumno(index) {
   const alumno = students[index];
   modalNombre.textContent = `${alumno.apellido.toUpperCase()}, ${alumno.nombre}`;
   
-  // Mostrar Curso, DNI y Turno del alumno.
   let studentDetailsHtml = `<strong>Curso:</strong> ${alumno.curso}<br><strong>DNI:</strong> ${alumno.dni}<br><strong>Turno:</strong> ${alumno.turno}`;
 
-  // Verificar materias que debe el alumno
   const materiasADeber = [];
   for (const [materia, nota] of Object.entries(alumno.notas)) {
     if (nota < NOTA_MINIMA_APROBACION) {
@@ -238,7 +234,7 @@ function showModalAlumno(index) {
 
   modalCurso.innerHTML = studentDetailsHtml;
 
-  modalResponsables.innerHTML = "<h4>Responsables</h4>"; // Título para la sección de responsables
+  modalResponsables.innerHTML = "<h4>Responsables</h4>"; 
   alumno.responsables.forEach((resp, i) => {
     modalResponsables.innerHTML += `
       <div class="responsable-item">
@@ -252,8 +248,7 @@ function showModalAlumno(index) {
     `;
   });
   
-  modalNotas.innerHTML = ""; // Limpiar notas previas
-  // Las notas se muestran en una lista aparte para mantener la sección de "Materias a Recuperar" limpia
+  modalNotas.innerHTML = ""; 
   for (const [materia, nota] of Object.entries(alumno.notas)) {
     const li = document.createElement("li");
     li.textContent = `${materia}: ${nota.toFixed(1)}`;
@@ -263,35 +258,34 @@ function showModalAlumno(index) {
   modal.style.display = "flex";
 }
 
-// Cerrar el modal
+
 modalClose.onclick = function () {
   modal.style.display = "none";
 };
 
-// Regresar al menú
+
 backBtn.onclick = function () {
   contentScreen.classList.remove("active");
   menuScreen.classList.add("active");
 };
 
-// Comenzar
+
 startBtn.onclick = function () {
   welcomeScreen.classList.remove("active");
   menuScreen.classList.add("active");
 };
 
-// Manejo de las opciones del menú
 menuButtons.forEach((btn) => {
   btn.onclick = function () {
     currentSection = btn.dataset.section;
     menuScreen.classList.remove("active");
     contentScreen.classList.add("active");
     renderSection(currentSection);
-    searchInput.value = ''; // Limpiar la búsqueda al cambiar de sección
+    searchInput.value = ''; 
   };
 });
 
-// Función para renderizar cada sección (alumnos, notas)
+
 function renderSection(section, studentsToRender = students) {
   switch (section) {
     case "datos":
@@ -305,7 +299,7 @@ function renderSection(section, studentsToRender = students) {
   }
 }
 
-// Mostrar las notas de los estudiantes con columnas separadas
+
 function mostrarNotas(alumnosAMostrar = students) {
   contenidoDiv.innerHTML = `
     <table>
@@ -340,17 +334,17 @@ function mostrarNotas(alumnosAMostrar = students) {
   `;
 }
 
-// Función de búsqueda (SOLO busca por datos del alumno: DNI, curso+apellido, y turno)
+
 searchInput.addEventListener("input", function () {
   const normalizedSearchTerm = normalizeString(searchInput.value.trim());
   
   const filteredStudents = students.filter((alumno) => {
-    // Normalizar todos los campos de alumno relevantes para la búsqueda
+    
     const normalizedNombreCompleto = normalizeString(`${alumno.nombre} ${alumno.apellido}`);
     const normalizedDni = normalizeString(alumno.dni);
     const normalizedTurno = normalizeString(alumno.turno);
 
-    // Normalizamos el curso para la búsqueda "apellido + (parte de) curso"
+    
     const normalizedCursoParaBusqueda = normalizeString(alumno.curso).replace(/[^0-9a-z]/gi, '');
     const normalizedApellido = normalizeString(alumno.apellido);
 
@@ -359,14 +353,14 @@ searchInput.addEventListener("input", function () {
 
     let matches = false;
 
-    // 1. Coincidencia por nombre completo, DNI o turno (todo normalizado)
+  
     if (normalizedNombreCompleto.includes(normalizedSearchTerm) ||
         normalizedDni.includes(normalizedSearchTerm) ||
         normalizedTurno.includes(normalizedSearchTerm)) {
         matches = true;
     }
 
-    // 2. Coincidencia para "apellido + curso" (todo normalizado)
+    
     if (!matches && searchParts.length >= 2) {
         const searchApellido = searchParts[0];
         const searchCurso = searchParts.slice(1).join(' '); 
@@ -378,7 +372,7 @@ searchInput.addEventListener("input", function () {
         }
     }
     
-    // 3. Permite buscar solo por el número del curso (e.g., "5" o "6")
+    
     if (!matches && normalizedCursoParaBusqueda.includes(normalizedSearchTerm) && normalizedSearchTerm.length > 0) {
         matches = true;
     }
