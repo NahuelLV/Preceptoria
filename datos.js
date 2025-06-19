@@ -166,14 +166,7 @@ const searchInput = document.getElementById("search-input");
 
 let currentSection = '';
 
-
-
-
-
-
 const NOTA_MINIMA_APROBACION = 6.0; 
-
-
 
 function normalizeString(str) {
   if (typeof str !== 'string') return '';
@@ -222,13 +215,6 @@ function showModalAlumno(index) {
   
   let studentDetailsHtml = `<strong>Curso:</strong> ${alumno.curso}<br><strong>DNI:</strong> ${alumno.dni}<br><strong>Turno:</strong> ${alumno.turno}`;
 
-
-
-
-
-
-
-
   const materiasADeber = [];
   for (const [materia, nota] of Object.entries(alumno.notas)) {
     if (nota < NOTA_MINIMA_APROBACION) {
@@ -242,30 +228,7 @@ function showModalAlumno(index) {
     studentDetailsHtml += `<br><br><strong>Materias a Recuperar:</strong> Ninguna`;
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   modalCurso.innerHTML = studentDetailsHtml;
-
-
-
-
   modalResponsables.innerHTML = "<h4>Responsables</h4>"; 
   alumno.responsables.forEach((resp, i) => {
     modalResponsables.innerHTML += `
@@ -289,15 +252,6 @@ function showModalAlumno(index) {
 
   modal.style.display = "flex";
 
-
-
-
-
-
-
-
-
-
 }
 
 modalClose.onclick = function () {
@@ -308,8 +262,6 @@ backBtn.onclick = function () {
   contentScreen.classList.remove("active");
   menuScreen.classList.add("active");
 };
-
-
 
 
 startBtn.onclick = function () {
@@ -376,60 +328,16 @@ function mostrarNotas(alumnosAMostrar = students) {
 
 searchInput.addEventListener("input", function () {
   const normalizedSearchTerm = normalizeString(searchInput.value.trim());
-
-
-
-
- 
   const searchParts = normalizedSearchTerm.split(' ').filter(part => part.length > 0);
-
-
-
-
-
-
-
-
-
-
   const filteredStudents = students.filter((alumno) => {
-
-
-
-
-
-
-
-
-
-
-
-
     const combinedFields = normalizeString(
       `${alumno.nombre} ${alumno.apellido} ${alumno.dni} ${alumno.curso} ${alumno.turno}`
     );
-
-
-
-
-
-
-
-
-   
     return searchParts.every(part => combinedFields.includes(part));
   });
 
   renderSection(currentSection, filteredStudents);
 });
-
-
-
-
-
-
-
-
 
   renderSection(currentSection, filteredStudents);
 });
