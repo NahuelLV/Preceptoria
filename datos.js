@@ -238,7 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const table = document.createElement("table");
     const thead = document.createElement("thead");
     const headerRow = document.createElement("tr");
-    ["Nombre", "Apellido", "DNI", "Curso", "Turno"].forEach(text => {
+    ["Nombre", "Apellido", "DNI", "Curso", "Turno", "Responsable 1", "Responsable 2"].forEach(text => {
       const th = document.createElement("th");
       th.textContent = text;
       headerRow.appendChild(th);
@@ -248,6 +248,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const tbody = document.createElement("tbody");
     data.forEach(alumno => {
+      // Obtener el nombre y apellido de los responsables o "N/A" si no existen
+      const responsable1 = alumno.responsables[0] ? `${alumno.responsables[0].nombre} ${alumno.responsables[0].apellido}` : "N/A";
+      const responsable2 = alumno.responsables[1] ? `${alumno.responsables[1].nombre} ${alumno.responsables[1].apellido}` : "N/A";
+      
       const tr = document.createElement("tr");
       tr.tabIndex = 0;
       tr.innerHTML = `
@@ -256,6 +260,8 @@ document.addEventListener("DOMContentLoaded", () => {
         <td>${alumno.dni}</td>
         <td>${alumno.curso}</td>
         <td>${alumno.turno}</td>
+        <td>${responsable1}</td>
+        <td>${responsable2}</td>
       `;
       tr.addEventListener("click", () => {
         showAlumnoDetalle(alumno);
@@ -324,7 +330,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     modalNotas.innerHTML = "";
     for (const [materia, nota] of Object.entries(alumno.notas)) {
-      if (nota < 7) {
+      if (nota < 5.9) {
         const li = document.createElement("li");
         li.textContent = `${materia}: ${nota}`;
         modalNotas.appendChild(li);
