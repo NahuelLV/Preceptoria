@@ -23,7 +23,7 @@ const students = [
         email: "maria.lopez@example.com"
       }
     ],
-    notas: { Matemáticas: 8.5, Español: 9.0, Ciencias: 7.8, Historia: 6.0 }, 
+    notas: { Matemáticas: 8.5, Español: 9.0, Ciencias: 7.8, Historia: 6.0 },
   },
   {
     nombre: "Carlos",
@@ -49,7 +49,7 @@ const students = [
         email: "miguel.gomez@example.com"
       }
     ],
-    notas: { Matemáticas: 5.2, Español: 6.8, Ciencias: 5.5, Historia: 7.0 }, 
+    notas: { Matemáticas: 5.2, Español: 6.8, Ciencias: 5.5, Historia: 7.0 },
   },
   {
     nombre: "Sofía",
@@ -75,7 +75,7 @@ const students = [
         email: "roberto.sanchez@example.com"
       }
     ],
-    notas: { Matemáticas: 9.0, Español: 8.5, Ciencias: 9.2, Historia: 9.0 }, 
+    notas: { Matemáticas: 9.0, Español: 8.5, Ciencias: 9.2, Historia: 9.0 },
   },
   {
     nombre: "Pedro",
@@ -124,16 +124,43 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalNotas = document.getElementById("modal-notas");
   const modalResponsables = document.getElementById("modal-responsables");
 
+  const themeToggleBtn = document.getElementById("theme-toggle-btn");
+
   let currentSection = "";
   let filteredStudents = [];
-  
-  // Navegar de bienvenida a menú
+
+  // Función para establecer el tema
+  function setTheme(theme) {
+    if (theme === "dark") {
+      document.body.classList.remove("light-mode");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.body.classList.add("light-mode");
+      localStorage.setItem("theme", "light");
+    }
+  }
+
+  // Cargar el tema guardado o por defecto (oscuro)
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme) {
+    setTheme(savedTheme);
+  } else {
+    setTheme("dark");
+  }
+
+  // Evento para cambiar el tema al hacer clic en el botón
+  themeToggleBtn.addEventListener("click", () => {
+    const currentTheme = document.body.classList.contains("light-mode") ? "light" : "dark";
+    const newTheme = currentTheme === "dark" ? "light" : "dark";
+    setTheme(newTheme);
+  });
+
+  // Funciones de navegación
   startBtn.addEventListener("click", () => {
     welcomeScreen.classList.remove("active");
     menuScreen.classList.add("active");
   });
 
-  // Mostrar contenido según sección elegida
   document.querySelectorAll(".menu-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       currentSection = btn.dataset.section;
@@ -144,26 +171,24 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Botón volver al menú
   backBtn.addEventListener("click", () => {
     contentScreen.classList.remove("active");
     menuScreen.classList.add("active");
     clearContent();
   });
 
-  // Filtrado en inputs de búsqueda
+  // Filtrado
   [searchName, searchDni, searchCurso].forEach(input => {
     input.addEventListener("input", () => {
       applyFilters();
     });
   });
 
-  // Cerrar modal
+  // Modal
   modalClose.addEventListener("click", () => {
     modal.classList.remove("show");
   });
 
-  // Cerrar modal si clic afuera del contenido
   modal.addEventListener("click", e => {
     if (e.target === modal) modal.classList.remove("show");
   });
@@ -224,7 +249,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const tbody = document.createElement("tbody");
     data.forEach(alumno => {
       const tr = document.createElement("tr");
-      tr.tabIndex = 0; // para accesibilidad y foco
+      tr.tabIndex = 0;
       tr.innerHTML = `
         <td>${alumno.nombre}</td>
         <td>${alumno.apellido}</td>
@@ -289,7 +314,6 @@ document.addEventListener("DOMContentLoaded", () => {
     contentDiv.appendChild(table);
   }
 
-  // Mostrar modal con detalles del alumno
   function showAlumnoDetalle(alumno) {
     modalNombre.textContent = `${alumno.nombre} ${alumno.apellido}`;
     modalDetalles.innerHTML = `
@@ -298,7 +322,6 @@ document.addEventListener("DOMContentLoaded", () => {
       <p><strong>Turno:</strong> ${alumno.turno}</p>
     `;
 
-    // Notas para recuperar (menos de 7)
     modalNotas.innerHTML = "";
     for (const [materia, nota] of Object.entries(alumno.notas)) {
       if (nota < 7) {
@@ -311,7 +334,6 @@ document.addEventListener("DOMContentLoaded", () => {
       modalNotas.innerHTML = "<li>No hay materias para recuperar</li>";
     }
 
-    // Responsables
     modalResponsables.innerHTML = "<h4>Responsables</h4>";
     alumno.responsables.forEach(res => {
       const div = document.createElement("div");
