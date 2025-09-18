@@ -297,6 +297,12 @@ tbody td {
   transition: color 0.5s ease, border-bottom 0.5s ease;
 }
 
+/* Nota desaprobada en rojo */
+td.desaprobado {
+  color: #ef5350 !important;
+  font-weight: bold;
+}
+
 /* Modal estilos */
 .modal {
   display: none;
@@ -485,4 +491,3 @@ tbody td {
 .admin-btn:hover {
   opacity: 0.8;
 }
-
