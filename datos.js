@@ -192,7 +192,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const table = document.createElement("table");
     const thead = document.createElement("thead");
     const headerRow = document.createElement("tr");
-    ["Nombre", "Apellido", "DNI", "Curso", "Turno", "Responsable 1", "Responsable 2"].forEach(text => {
+    // Se cambiaron los encabezados de las columnas
+    ["Apellido", "Nombre", "DNI", "Curso", "Turno", "Responsable 1", "Responsable 2"].forEach(text => {
       const th = document.createElement("th");
       th.textContent = text;
       headerRow.appendChild(th);
@@ -202,14 +203,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const tbody = document.createElement("tbody");
     data.forEach(alumno => {
-      const responsable1 = alumno.responsables && alumno.responsables[0] ? `${alumno.responsables[0].nombre} ${alumno.responsables[0].apellido}` : "N/A";
-      const responsable2 = alumno.responsables && alumno.responsables[1] ? `${alumno.responsables[1].nombre} ${alumno.responsables[1].apellido}` : "N/A";
+      const responsable1 = alumno.responsables && alumno.responsables[0] ? `${alumno.responsables[0].apellido} ${alumno.responsables[0].nombre}` : "N/A";
+      const responsable2 = alumno.responsables && alumno.responsables[1] ? `${alumno.responsables[1].apellido} ${alumno.responsables[1].nombre}` : "N/A";
 
       const tr = document.createElement("tr");
       tr.tabIndex = 0;
       tr.innerHTML = `
-        <td>${alumno.nombre}</td>
         <td>${alumno.apellido}</td>
+        <td>${alumno.nombre}</td>
         <td>${alumno.dni}</td>
         <td>${alumno.curso}</td>
         <td>${alumno.turno}</td>
@@ -236,7 +237,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const table = document.createElement("table");
     const thead = document.createElement("thead");
     const headerRow = document.createElement("tr");
-    ["Nombre", "Apellido", "DNI", "Matemáticas", "Español", "Ciencias", "Historia"].forEach(text => {
+    // Se cambiaron los encabezados de las columnas
+    ["Apellido", "Nombre", "DNI", "Matemáticas", "Español", "Ciencias", "Historia"].forEach(text => {
       const th = document.createElement("th");
       th.textContent = text;
       headerRow.appendChild(th);
@@ -250,15 +252,32 @@ document.addEventListener("DOMContentLoaded", () => {
       const notas = alumno.notas || {};
       const tr = document.createElement("tr");
       tr.tabIndex = 0;
-      tr.innerHTML = `
-        <td>${alumno.nombre}</td>
-        <td>${alumno.apellido}</td>
-        <td>${alumno.dni}</td>
-        <td>${notas["Matemáticas"] ?? "-"}</td>
-        <td>${notas["Español"] ?? "-"}</td>
-        <td>${notas["Ciencias"] ?? "-"}</td>
-        <td>${notas["Historia"] ?? "-"}</td>
-      `;
+      
+      // Creamos las celdas individualmente para aplicar la clase
+      const celdaApellido = document.createElement('td');
+      celdaApellido.textContent = alumno.apellido;
+      tr.appendChild(celdaApellido);
+
+      const celdaNombre = document.createElement('td');
+      celdaNombre.textContent = alumno.nombre;
+      tr.appendChild(celdaNombre);
+
+      const celdaDni = document.createElement('td');
+      celdaDni.textContent = alumno.dni;
+      tr.appendChild(celdaDni);
+
+      const materias = ["Matemáticas", "Español", "Ciencias", "Historia"];
+      materias.forEach(materia => {
+          const celdaNota = document.createElement('td');
+          const nota = notas[materia] ?? "-";
+          celdaNota.textContent = nota;
+          // Aplicamos la clase si la nota es menor a 6
+          if (nota !== "-" && parseFloat(nota) < 6) {
+              celdaNota.classList.add('desaprobado');
+          }
+          tr.appendChild(celdaNota);
+      });
+
       tr.addEventListener("click", () => showAlumnoDetalle(alumno));
       tr.addEventListener("keypress", e => { if (e.key === "Enter") showAlumnoDetalle(alumno); });
       tbody.appendChild(tr);
@@ -270,7 +289,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Mostrar detalle / Modal ---
   function showAlumnoDetalle(alumno) {
-    modalNombre.textContent = `${alumno.nombre} ${alumno.apellido}`;
+    // Se cambió el orden de nombre y apellido
+    modalNombre.textContent = `${alumno.apellido} ${alumno.nombre}`;
     modalDetalles.innerHTML = `
       <p><strong>DNI:</strong> ${alumno.dni}</p>
       <p><strong>Curso:</strong> ${alumno.curso}</p>
@@ -328,7 +348,7 @@ document.addEventListener("DOMContentLoaded", () => {
       deleteBtn.textContent = "Eliminar Alumno";
       deleteBtn.style.marginLeft = "8px";
       deleteBtn.addEventListener("click", () => {
-        const ok = confirm(`¿Eliminar definitivamente a ${alumno.nombre} ${alumno.apellido}?`);
+        const ok = confirm(`¿Eliminar definitivamente a ${alumno.apellido} ${alumno.nombre}?`);
         if (!ok) return;
         // Buscar por referencia y eliminar
         const idx = students.indexOf(alumno);
@@ -357,7 +377,7 @@ document.addEventListener("DOMContentLoaded", () => {
           hasRecover = true;
         }
       }
-      if (!hasRecover) modalNotas.innerHTML = "<li>No hay materias para recuperar</li>";
+      if (!hasRecover) modalNotas.innerHTML = "<li>No tiene materias adeudadas o sin acreditar</li>";
     }
 
     // Responsables (siempre mostrar)
@@ -366,7 +386,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const div = document.createElement("div");
       div.className = "responsable-item";
       div.innerHTML = `
-        <p><strong>${res.parentesco}:</strong> ${res.nombre} ${res.apellido}</p>
+        <p><strong>${res.parentesco}:</strong> ${res.apellido} ${res.nombre}</p>
         <p><strong>DNI:</strong> ${res.dni}</p>
         <p><strong>Teléfono:</strong> ${res.telefono}</p>
         <p><strong>Email:</strong> <a href="mailto:${res.email}">${res.email}</a></p>
@@ -388,7 +408,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const table = document.createElement("table");
     const thead = document.createElement("thead");
     const headerRow = document.createElement("tr");
-    ["Nombre", "Apellido", "DNI", "Curso", "Turno", "Acciones"].forEach(text => {
+    // Se cambiaron los encabezados de las columnas
+    ["Apellido", "Nombre", "DNI", "Curso", "Turno", "Acciones"].forEach(text => {
       const th = document.createElement("th");
       th.textContent = text;
       headerRow.appendChild(th);
@@ -404,8 +425,8 @@ document.addEventListener("DOMContentLoaded", () => {
       tr.dataset.dniOriginal = alumno.dni;
 
       tr.innerHTML = `
-        <td contenteditable="true">${alumno.nombre}</td>
         <td contenteditable="true">${alumno.apellido}</td>
+        <td contenteditable="true">${alumno.nombre}</td>
         <td contenteditable="true">${alumno.dni}</td>
         <td contenteditable="true">${alumno.curso}</td>
         <td contenteditable="true">${alumno.turno}</td>
@@ -428,8 +449,8 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
         // Asignamos valores (sanitizamos con trim)
-        students[idx].nombre = tds[0].textContent.trim();
-        students[idx].apellido = tds[1].textContent.trim();
+        students[idx].nombre = tds[1].textContent.trim();
+        students[idx].apellido = tds[0].textContent.trim();
         students[idx].dni = tds[2].textContent.trim();
         students[idx].curso = tds[3].textContent.trim();
         students[idx].turno = tds[4].textContent.trim();
@@ -461,7 +482,7 @@ document.addEventListener("DOMContentLoaded", () => {
           alert("Alumno no encontrado.");
           return;
         }
-        const ok = confirm(`¿Eliminar definitivamente a ${students[idx].nombre} ${students[idx].apellido}?`);
+        const ok = confirm(`¿Eliminar definitivamente a ${students[idx].apellido} ${students[idx].nombre}?`);
         if (!ok) return;
         students.splice(idx, 1);
         alert("Alumno eliminado.");
