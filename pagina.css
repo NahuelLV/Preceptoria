@@ -384,7 +384,7 @@ td.desaprobado {
   text-decoration: underline;
 }
 
-#modal-notas {
+#modal-notas, #modal-pendientes-anteriores { /* SE MODIFICA EL SELECTOR */
   margin-top: 10px;
   list-style-type: disc;
   padding-left: 24px;
