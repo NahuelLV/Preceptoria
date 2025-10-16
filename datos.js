@@ -1,5 +1,4 @@
 // datos.js
-
 const students = [
   {
     nombre: "Ana",
@@ -13,6 +12,9 @@ const students = [
       { nombre: "María", apellido: "López", parentesco: "Madre", telefono: "1199887766", dni: "25678901", email: "maria.lopez@example.com" }
     ],
     notas: { Matemáticas: 8.5, Español: 9.0, Ciencias: 7.8, Historia: 6.0 },
+    materiasAnterioresPendientes: [
+        { materia: "Física", anio: "3° año" }
+    ]
   },
   {
     nombre: "Carlos",
@@ -26,6 +28,10 @@ const students = [
       { nombre: "Miguel", apellido: "Gómez", parentesco: "Padre", telefono: "1177553311", dni: "29874561", email: "miguel.gomez@example.com" }
     ],
     notas: { Matemáticas: 5.2, Español: 6.8, Ciencias: 5.5, Historia: 7.0 },
+    materiasAnterioresPendientes: [
+        { materia: "Lengua Extranjera", anio: "1° año" },
+        { materia: "Química", anio: "2° año" }
+    ]
   },
   {
     nombre: "Sofía",
@@ -39,6 +45,7 @@ const students = [
       { nombre: "Roberto", apellido: "Sánchez", parentesco: "Padre", telefono: "1188997766", dni: "25671234", email: "roberto.sanchez@example.com" }
     ],
     notas: { Matemáticas: 9.0, Español: 8.5, Ciencias: 9.2, Historia: 9.0 },
+    materiasAnterioresPendientes: []
   },
   {
     nombre: "Pedro",
@@ -52,6 +59,7 @@ const students = [
       { nombre: "Jorge", apellido: "Torres", parentesco: "Padre", telefono: "1166778899", dni: "37689123", email: "jorge.torres@example.com" }
     ],
     notas: { Matemáticas: 4.5, Español: 5.5, Ciencias: 6.0, Historia: 7.5 },
+    materiasAnterioresPendientes: []
   },
   {
     nombre: "Javier",
@@ -64,6 +72,7 @@ const students = [
       { nombre: "Silvia", apellido: "Molina", parentesco: "Madre", telefono: "1112345678", dni: "30123456", email: "silvia.molina@example.com" }
     ],
     notas: { Matemáticas: 7.0, Español: 7.5, Ciencias: 8.0, Historia: 8.5 },
+    materiasAnterioresPendientes: []
   }
 ];
 
@@ -86,6 +95,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const modalDetalles = document.getElementById("modal-detalles");
     const modalNotas = document.getElementById("modal-notas");
     const modalResponsables = document.getElementById("modal-responsables");
+    // NUEVO ELEMENTO
+    const modalPendientesAnteriores = document.getElementById("modal-pendientes-anteriores");
 
     const themeToggleBtn = document.getElementById("theme-toggle-btn");
 
@@ -333,7 +344,7 @@ document.addEventListener("DOMContentLoaded", () => {
         contentDiv.appendChild(table);
     }
 
-    // --- Mostrar detalle / Modal (MODIFICADO para mostrar Especialidad) ---
+    // --- Mostrar detalle / Modal (MODIFICADO para mostrar Pendientes Anteriores) ---
     function showAlumnoDetalle(alumno) {
         const { curso, division } = getCursoDivision(alumno.curso);
         const especialidad = getEspecialidad(alumno.curso, alumno.especialidad);
@@ -351,8 +362,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const isAdmin = adminScreen.classList.contains("active");
 
         modalNotas.innerHTML = "";
+        modalPendientesAnteriores.innerHTML = ""; // Limpiamos la nueva lista
+
         if (isAdmin) {
-            // Crear formulario de edición de notas
+            // Crear formulario de edición de notas (igual que antes)
             const notas = alumno.notas || {};
             const form = document.createElement("div");
             form.className = "admin-notes-form";
@@ -454,7 +467,20 @@ document.addEventListener("DOMContentLoaded", () => {
                     hasRecover = true;
                 }
             }
-            if (!hasRecover) modalNotas.innerHTML = "<li>No tiene materias adeudadas o sin acreditar</li>";
+            if (!hasRecover) modalNotas.innerHTML = "<li>No tiene asignaturas sin acreditar del año en curso.</li>";
+        }
+
+
+        // Lógica para mostrar las Asignaturas pendientes de acreditación (Años Anteriores)
+        const pendientesAnteriores = alumno.materiasAnterioresPendientes || [];
+        if (pendientesAnteriores.length > 0) {
+            pendientesAnteriores.forEach(pendiente => {
+                const li = document.createElement("li");
+                li.textContent = `${pendiente.materia} (${pendiente.anio})`;
+                modalPendientesAnteriores.appendChild(li);
+            });
+        } else {
+            modalPendientesAnteriores.innerHTML = "<li>No tiene asignaturas pendientes de acreditación de años anteriores.</li>";
         }
 
         // Responsables (siempre mostrar)
