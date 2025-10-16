@@ -5,7 +5,7 @@ const students = [
     nombre: "Ana",
     apellido: "García",
     dni: "12345678",
-    curso: "5° A", // Se mantiene así para buscar fácil, se divide al renderizar
+    curso: "5° 2da", // Se mantiene así para buscar fácil, se divide al renderizar
     turno: "Mañana",
     especialidad: "COMP", // Dato de ejemplo para 5°
     responsables: [
@@ -18,7 +18,7 @@ const students = [
     nombre: "Carlos",
     apellido: "Fernández",
     dni: "87654321",
-    curso: "5° B",
+    curso: "5° 1ra",
     turno: "Tarde",
     especialidad: "AUT", // Dato de ejemplo para 5°
     responsables: [
@@ -31,7 +31,7 @@ const students = [
     nombre: "Sofía",
     apellido: "Ramírez",
     dni: "33445566",
-    curso: "2° C",
+    curso: "2° 2da",
     turno: "Mañana",
     especialidad: "CB", // Dato de ejemplo para 2°
     responsables: [
@@ -44,7 +44,7 @@ const students = [
     nombre: "Pedro",
     apellido: "López",
     dni: "55667788",
-    curso: "6° A",
+    curso: "6° 2da",
     turno: "Tarde",
     especialidad: "COMP", // Dato de ejemplo para 6°
     responsables: [
@@ -57,7 +57,7 @@ const students = [
     nombre: "Javier",
     apellido: "Molina",
     dni: "44556677",
-    curso: "3° A",
+    curso: "3° 9na",
     turno: "Mañana",
     especialidad: "AUT", // Dato de ejemplo para 3°
     responsables: [
