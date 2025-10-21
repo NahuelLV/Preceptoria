@@ -467,7 +467,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     hasRecover = true;
                 }
             }
-            if (!hasRecover) modalNotas.innerHTML = "<li>No tiene asignaturas sin acreditar del año en curso.</li>";
+            if (!hasRecover) modalNotas.innerHTML = "<li>SIN ASIGNATURAS.</li>";
         }
 
 
@@ -480,7 +480,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 modalPendientesAnteriores.appendChild(li);
             });
         } else {
-            modalPendientesAnteriores.innerHTML = "<li>No tiene asignaturas pendientes de acreditación de años anteriores.</li>";
+            modalPendientesAnteriores.innerHTML = "<li>SIN ASIGNATURAS.</li>";
         }
 
         // Responsables (siempre mostrar)
